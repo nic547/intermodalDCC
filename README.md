@@ -4,6 +4,9 @@
 
 [Repo/Issues (Codeberg)](https://codeberg.org/nic546/dc3s) | [Mirror (GitHub)](https://github.com/nic547/DC3S-BT) | [Web App](https://dc3s.pages.dev/) | [Web App (Development)](https://preview.dc3s.pages.dev/)
 
+<img src="res/DesktopScreenshot.png" alt="Screenshot of the Web application on a desktop device" width="80%">
+<img src="res/MobileScreenshot.png" alt="Screenshot of the Web application on a mobile device" width="50%">
+
 DC3S is an experimental project to DCC command station to combine cheap and widely available Bluetooth enabled microcontroller boards with a WebBluetooth based web application to control model trains.
 
 It's not intended to be a one-size-fits-all solution, rather focusing on the Bluetooth aspect.
