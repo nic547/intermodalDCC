@@ -127,4 +127,7 @@ void getNextPacket() {
 
   interrupts();
 }
+
+void resetCurrentPacket() {
+}
 }; // namespace signal_generation

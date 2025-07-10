@@ -1,12 +1,13 @@
 /// <reference types="web-bluetooth" />
 
-import { Injectable, Signal, type WritableSignal, signal } from '@angular/core';
+import { Injectable, type Signal, type WritableSignal, signal } from '@angular/core';
 import type { IBLEService } from './ble.interface';
 
 @Injectable({
     providedIn: 'root',
 })
 export class BleFakeService implements IBLEService {
+    isTrackPowerOn: Signal<boolean> = signal(false);
     isLoading = signal(false);
     isReady = signal(false);
     isAvailable = signal(true);
@@ -25,5 +26,10 @@ export class BleFakeService implements IBLEService {
 
     async setSpeed128(address: number, speed: number, forwards: boolean) {
         console.log('setSpeed128', address, speed, forwards);
+    }
+
+    async setTrackPower(enabled: boolean) {
+        console.log('setTrackPower', enabled);
+        (this.isTrackPowerOn as WritableSignal<boolean>).set(enabled);
     }
 }

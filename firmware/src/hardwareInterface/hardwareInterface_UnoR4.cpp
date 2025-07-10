@@ -9,9 +9,20 @@
 namespace hardwareInterface {
 
 FspTimer dcc_timer;
+
+constexpr float TIMER_RATE = 1'000'000.0f / 58.0f;
+
 void (*signal_callback)() = nullptr;
 
 bool beginTimer(float rate, void (*timer_callback)(timer_callback_args_t *));
+
+void enable_b() {
+  R_PORT4->POSR = (1 << 11);
+}
+
+void disable_b() {
+  R_PORT4->PORR = (1 << 11);
+}
 
 void direction_b_on() {
   R_PORT1->POSR = (1 << 2);
@@ -19,7 +30,7 @@ void direction_b_on() {
 void direction_b_off() {
   R_PORT1->PORR = (1 << 2);
 }
-constexpr float TIMER_RATE = 1'000'000.0f / 58.0f;
+
 
 void callback(timer_callback_args_t *p_args) {
   signal_callback();
@@ -29,7 +40,7 @@ void setUpHardware(void (*timer_callback)()) {
   pinMode(13, OUTPUT);
   pinMode(11, OUTPUT);
 
-  digitalWrite(11, HIGH);
+  enable_b();
 
   signal_callback = timer_callback;
 
@@ -69,6 +80,15 @@ bool beginTimer(float rate, void (*timer_callback)(timer_callback_args_t *)) {
   }
   return true;
 }
+
+void startTimer() {
+  dcc_timer.start();
+}
+
+void stopTimer() {
+  dcc_timer.stop();
+}
+
 } // namespace hardware_interface
 
 #endif

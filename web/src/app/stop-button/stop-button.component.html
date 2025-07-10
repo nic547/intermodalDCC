@@ -1,0 +1,8 @@
+<div class="stop-button-container">
+  <button class="stop-button" 
+          [class.track-on]="bleService.isTrackPowerOn()"
+          [class.track-off]="!bleService.isTrackPowerOn()"
+          (click)="toggleTrackPower()">
+    {{ bleService.isTrackPowerOn() ? 'Active' : 'Stopped' }}
+  </button>
+</div>
