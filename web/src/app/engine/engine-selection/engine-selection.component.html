@@ -1,4 +1,5 @@
-<dialog #selectionDialog (cancel)="close()">
+<div class="dialog" #selectionDialog (cancel)="close()">
+  <div class="dialog-content">
   <h2>Select Engine</h2>
   <div class="toolbar">
     <div class="input">
@@ -44,4 +45,5 @@
     <button class="secondary" (click)="closeFallbackFileSelector()">Cancel</button>
     }
   </nav>
-</dialog>
+  </div>
+</div>

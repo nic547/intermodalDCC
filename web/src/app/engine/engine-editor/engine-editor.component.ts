@@ -12,7 +12,7 @@ import { IconModule } from '../../ui/icon.module';
     templateUrl: './engine-editor.component.html',
     styleUrl: './engine-editor.component.css',
 })
-export class EngineEditorComponent implements OnInit, AfterViewInit {
+export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
 
@@ -22,8 +22,6 @@ export class EngineEditorComponent implements OnInit, AfterViewInit {
 
     public numberOfFunctions = 0;
 
-    @ViewChild('engineEditor') engineEditorDialog: ElementRef<HTMLDialogElement> | null = null;
-
     ngOnInit(): void {
         const engine = this.stateService.editingEngine();
         if (engine == null) {
@@ -32,10 +30,6 @@ export class EngineEditorComponent implements OnInit, AfterViewInit {
         }
         this.engine = structuredClone(engine);
         this.numberOfFunctions = this.engine.functions.length;
-    }
-
-    ngAfterViewInit(): void {
-        this.engineEditorDialog?.nativeElement.showModal();
     }
 
     async save() {

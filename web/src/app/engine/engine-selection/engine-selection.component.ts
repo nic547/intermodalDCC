@@ -29,7 +29,7 @@ import { IconModule } from '../../ui/icon.module';
     templateUrl: './engine-selection.component.html',
     styleUrl: './engine-selection.component.css',
 })
-export class EngineSelectionComponent implements AfterViewInit {
+export class EngineSelectionComponent {
     public showSelection = model.required<boolean>();
 
     private stateService = inject(StateService);
@@ -49,12 +49,6 @@ export class EngineSelectionComponent implements AfterViewInit {
     protected desc = signal<boolean>(true);
 
     protected showFallbackFileSelector = signal(false);
-
-    @ViewChild('selectionDialog') engineSelectionDialog: ElementRef<HTMLDialogElement> | null = null;
-
-    async ngAfterViewInit(): Promise<void> {
-        this.engineSelectionDialog?.nativeElement.showModal();
-    }
 
     public async createNewPersistentEngine() {
         this.stateService.editingEngine.set(new PersistentEngine());

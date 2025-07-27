@@ -95,16 +95,23 @@ button:disabled {
     cursor: initial;
 }
 
-dialog::backdrop {
+.dialog {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
     backdrop-filter: blur(1px) brightness(0.375);
+    overflow: auto;
 }
 
-dialog {
+.dialog-content {
     min-width: min(600px, 100dvw);
     border-width: 1px;
     border-radius: 0.5rem;
     border-color: var(--border-color);
     background-color: var(--background-primary);
+    margin: var(--padding);
+    padding: var(--padding);
 }
 
 article {
