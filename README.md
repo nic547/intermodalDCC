@@ -1,6 +1,6 @@
 # intermodalDCC
 
-[Repo/Issues (Codeberg)](https://codeberg.org/nic547/intermodalDCC) | [Mirror (GitHub)](https://github.com/nic547/intermodalDCC) | [Web App](intermodaldcc.nic547.ch) | [Web App (Development)](preview.intermodaldcc.nic547.ch)
+[Repo/Issues (Codeberg)](https://codeberg.org/nic547/intermodalDCC) | [Mirror (GitHub)](https://github.com/nic547/intermodalDCC) | [Web App](https://intermodaldcc.nic547.ch/) | [Web App (Development)](https://preview.intermodaldcc.nic547.ch/)
 
 <img src="res/DesktopScreenshot.png" alt="Screenshot of the Web application on a desktop device" width="80%">
 <img src="res/MobileScreenshot.png" alt="Screenshot of the Web application on a mobile device" width="50%">
