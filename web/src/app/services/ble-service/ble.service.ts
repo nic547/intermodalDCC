@@ -1,6 +1,6 @@
 /// <reference types="web-bluetooth" />
 
-import { Injectable, type WritableSignal, signal } from '@angular/core';
+import { Injectable, type Signal, type WritableSignal, signal } from '@angular/core';
 import { BleFakeService } from './ble-fake.service';
 import type { IBLEService } from './ble.interface';
 import { Session } from './ble.types';
@@ -41,10 +41,13 @@ export class BLEService implements IBLEService {
     sessionUuid = signal<string | null>(null);
     IsFake = false;
 
+    isTrackPowerOn: Signal<boolean> = signal(false);
+
     private session: BluetoothRemoteGATTCharacteristic | null = null;
 
     private functionCommand: BluetoothRemoteGATTCharacteristic | null = null;
     private Speed128Command: BluetoothRemoteGATTCharacteristic | null = null;
+    private TrackPowerCharacteristic: BluetoothRemoteGATTCharacteristic | null = null;
 
     async setup() {
         try {
@@ -65,6 +68,7 @@ export class BLEService implements IBLEService {
             await this.loadCharacteristics(server);
 
             await this.checkSessions();
+            await this.loadTrackPower();
 
 
         } catch (error: unknown) {
@@ -138,15 +142,46 @@ export class BLEService implements IBLEService {
             },
         );
     }
+    
+    async setTrackPower(enabled: boolean) {
+        await this.enqueueCommand(
+            'setTrackPower',
+            [enabled],
+            async () => {
+                const buffer = new ArrayBuffer(1);
+                const view = new DataView(buffer);
+                view.setUint8(0, enabled ? 1 : 0);
+
+                await this.TrackPowerCharacteristic?.writeValue(buffer);
+                (this.isTrackPowerOn as WritableSignal<boolean>).set(enabled);
+            },
+        );
+    }
+
+    private async loadTrackPower(): Promise<void> {
+        await this.enqueueCommand(
+            'getTrackPower',
+            [],
+            async () => {
+                const value = await this.TrackPowerCharacteristic?.readValue();
+                // If value is nullish, assume system is stopped (false)
+                const powerOn = value?.getUint8(0) === 1;
+                (this.isTrackPowerOn as WritableSignal<boolean>).set(powerOn);
+            }
+        );
+    }
+
 
     private async loadCharacteristics(server: BluetoothRemoteGATTServer) {
         const mainService = await server.getPrimaryService('789624c2-214b-4730-b53d-fe5aa3143250');
         const locoService = await server.getPrimaryService('6d3fe63e-4083-483a-ab0c-36113ecb859f');
 
         this.session = await mainService.getCharacteristic('8dbc05a5-a6f8-4ae0-a480-2fd036160769');
+        this.TrackPowerCharacteristic = await mainService.getCharacteristic('8822c228-d8fb-4043-aef0-c393584b4c13');
 
         this.functionCommand = await locoService.getCharacteristic('4d550020-9408-4c08-a9c0-904ead62a642');
         this.Speed128Command = await locoService.getCharacteristic('a829de9a-6dff-4500-ad7b-90889ef346c0');
+
         console.log(await this.functionCommand.readValue());
     }
 

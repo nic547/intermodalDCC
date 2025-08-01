@@ -1,0 +1,29 @@
+.stop-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  position: relative;
+  z-index: 9999;
+}
+
+.stop-button {
+  font-size: 1.25rem;
+  font-weight: 600;
+  width: 100%;
+  max-width: 300px;
+  min-height: 60px;
+}
+
+/* Track power off state - green start button */
+.stop-button.track-off {
+  background-color: var(--color-error-background);
+  border-color: var(--color-error-background);
+}
+
+/* Track power on state - red stop button (default styling) */
+.stop-button.track-on {
+  background-color: var(--color-success-background);
+  border-color: var(--color-success-background);
+}

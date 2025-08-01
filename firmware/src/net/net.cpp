@@ -5,10 +5,12 @@
 #include "types.hpp"
 #include <ArduinoBLE.h>
 #include <stateManager.hpp>
+#include <hardwareInterface/hardwareInterface.hpp>
 
 namespace net {
 void handleSpeed128Command(BLEDevice central, BLECharacteristic characteristic);
 void handleFunctionCommand(BLEDevice central, BLECharacteristic characteristic);
+void handleTrackStatusCommand(BLEDevice central, BLECharacteristic characteristic);
 
 namespace main {
 BLEService service = BLEService("789624c2-214b-4730-b53d-fe5aa3143250");
@@ -16,11 +18,10 @@ BLECharacteristic version = BLECharacteristic("53b477e7-20c2-446a-bffc-762edee4e
 BLECharacteristic hash = BLECharacteristic("cc203f79-84e1-4d9b-9e06-f23211a16c5d", BLERead, sizeof(version::hash), true);
 BLECharacteristic session = BLECharacteristic("8dbc05a5-a6f8-4ae0-a480-2fd036160769", BLERead | BLEWrite, sizeof(Session), true);
 
+BLECharacteristic trackStatus = BLECharacteristic("8822c228-d8fb-4043-aef0-c393584b4c13", BLERead | BLEWrite | BLENotify, sizeof(uint8_t), true);
+
 } // namespace main
 
-namespace track {
-
-}
 
 namespace locomotive {
 BLEService service = BLEService("6d3fe63e-4083-483a-ab0c-36113ecb859f");
@@ -30,16 +31,19 @@ BLECharacteristic function = BLECharacteristic("4d550020-9408-4c08-a9c0-904ead62
 
 void init() {
   BLE.begin();
-  BLE.setLocalName("DC3S-BT");
-  BLE.setDeviceName("DC3S-BT");
+  BLE.setLocalName("intermodalDCC");
+  BLE.setDeviceName("intermodalDCC");
   BLE.setConnectionInterval(0x0006, 0x0006); // that should equal 7.5ms, the minimal value - it seems to improve the latency, not sure what the default is...
 
   main::version.writeValue(reinterpret_cast<const uint8_t *>(version::value), sizeof(version::value));
   main::hash.writeValue(reinterpret_cast<const uint8_t *>(version::hash), sizeof(version::hash));
   main::session.writeValue(Session(), sizeof(Session));
+  main::trackStatus.writeValue(reinterpret_cast<const uint8_t *>(0), sizeof(uint8_t));
+  main::trackStatus.setEventHandler(BLEWritten, handleTrackStatusCommand);
   main::service.addCharacteristic(main::version);
   main::service.addCharacteristic(main::hash);
   main::service.addCharacteristic(main::session);
+  main::service.addCharacteristic(main::trackStatus);
   BLE.addService(main::service);
 
   // Locomotive service
@@ -76,6 +80,27 @@ void handleFunctionCommand(BLEDevice central, BLECharacteristic characteristic) 
     FunctionCommand command;
     memcpy(&command, characteristic.value(), sizeof(FunctionCommand));
     state_manager::setFunction(command.engine, command.function, command.state);
+  }
+}
+
+void handleTrackStatusCommand(BLEDevice central, BLECharacteristic characteristic) {
+  Serial.println("Track status command received");
+  if (characteristic.written()) {
+    uint8_t status;
+    memcpy(&status, characteristic.value(), sizeof(uint8_t));
+    
+    if (status) {
+      hardwareInterface::enable_b();
+      hardwareInterface::startTimer();
+      Serial.println("Track is ON");
+    } else {
+      hardwareInterface::disable_b();
+      hardwareInterface::direction_b_off();
+      hardwareInterface::stopTimer();
+      signalGeneration::resetCurrentPacket();
+      Serial.println("Track is OFF");
+    }
+    
   }
 }
 } // namespace net

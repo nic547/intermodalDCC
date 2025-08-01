@@ -101,7 +101,7 @@ export class EngineSelectionComponent implements AfterViewInit {
 
         const element = document.createElement('a');
         element.setAttribute('href', `data:application/gzip;base64,${text}`);
-        element.setAttribute('download', 'dc3s_engines.json.gz');
+        element.setAttribute('download', 'intermodalDCC_engines.json.gz');
 
         element.style.display = 'none';
         document.body.appendChild(element);

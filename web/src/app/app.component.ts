@@ -5,12 +5,13 @@ import { BLESetupComponent } from './ble-setup/ble-setup.component';
 import { BLEServiceToken } from './services/ble-service/ble.interface';
 
 import { EngineRootComponent } from './engine/engine-root.component';
+import { StopButtonComponent } from './stop-button/stop-button.component';
 import { BLEService } from './services/ble-service/ble.service';
 import { DataService } from './services/data-service/data.service';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, BLESetupComponent, EngineRootComponent],
+    imports: [RouterOutlet, BLESetupComponent, EngineRootComponent, StopButtonComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
     providers: [{ provide: BLEServiceToken, useFactory: BLEService.create }],
