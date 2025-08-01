@@ -31,8 +31,8 @@ BLECharacteristic function = BLECharacteristic("4d550020-9408-4c08-a9c0-904ead62
 
 void init() {
   BLE.begin();
-  BLE.setLocalName("DC3S-BT");
-  BLE.setDeviceName("DC3S-BT");
+  BLE.setLocalName("intermodalDCC");
+  BLE.setDeviceName("intermodalDCC");
   BLE.setConnectionInterval(0x0006, 0x0006); // that should equal 7.5ms, the minimal value - it seems to improve the latency, not sure what the default is...
 
   main::version.writeValue(reinterpret_cast<const uint8_t *>(version::value), sizeof(version::value));

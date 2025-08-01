@@ -6,11 +6,11 @@ import { DccFunction, PersistenEngine } from '../../engine/types';
     providedIn: 'root',
 })
 export class DataService {
-    private db: IDBPDatabase<DC3SDB> | undefined;
+    private db: IDBPDatabase<appDb> | undefined;
 
     // Mostly for the tests - somehow doesn't work reliably when not an arrow function
-    setup = async (dbName = 'dc3s-db'): Promise<void> => {
-        this.db = await openDB<DC3SDB>(dbName, 1, {
+    setup = async (dbName = 'intermodaldcc-db'): Promise<void> => {
+        this.db = await openDB<appDb>(dbName, 1, {
             upgrade(db) {
                 db?.createObjectStore('engines');
             },
@@ -83,7 +83,7 @@ export class DataService {
     }
 }
 
-interface DC3SDB extends DBSchema {
+interface appDb extends DBSchema {
     engines: {
         key: string;
         value: PersistenEngine;
