@@ -1,4 +1,5 @@
-<dialog #engineEditor (cancel)="cancel()" (close)="cancel()">
+<div class="dialog" #engineEditor (cancel)="cancel()" (close)="cancel()">
+  <div class="dialog-content">
   <h5>Edit Engine</h5>
   <div>
     <div class="input">
@@ -60,4 +61,5 @@
       <button (click)="cancel()" class="secondary">Cancel</button>
       <button (click)="save()">Save</button>
     </nav>
-  </dialog>
+    </div>
+  </div>

@@ -1,6 +1,8 @@
 #engine-container {
     display: flex;
     align-items: center;
+    max-width: 100dvw;
+    overflow-x: auto;
 }
 
 #engine-container > :first-child {

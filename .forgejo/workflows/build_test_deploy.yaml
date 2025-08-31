@@ -1,0 +1,44 @@
+on: [push]
+jobs:
+  print-content:
+    runs-on: docker
+    container:
+      image: node:24
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update package sources and install chromium
+        run: |
+          apt-get update
+          apt-get install -y chromium
+      - name: Setup global tools from npm
+        run: |
+          npm install -g @angular/cli
+          npm install -g @azure/static-web-apps-cli
+      - name: Build
+        run: |
+          cd web
+          npm install
+          ng build
+      - name: Test
+        run: |
+          export CHROME_BIN=/usr/bin/chromium
+          cd web
+          ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
+      - name: Build and deploy to preview
+        if: github.ref == 'refs/heads/dev'
+        # the preview static site is seperate from the "prod" one to be able to set a custom domain
+        # so we still deploy to the "prod env", but on a different service.
+        run: |
+          cd web
+          npm run patch-webmanifest "imDCC PRE" "intermodalDCC PREVIEW"
+          ng build
+          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_PREVIEW_TOKEN }} --env production
+      - name: Build and deploy to prod
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd web
+          npm run patch-webmanifest "imDCC" "intermodalDCC"
+          ng build
+          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_TOKEN }} --env production
