@@ -7,7 +7,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Setup global tools
+
+      - name: Update package sources and install chromium
+        run: |
+          apt-get update
+          apt-get install -y chromium
+      - name: Setup global tools from npm
         run: |
           npm install -g @angular/cli
           npm install -g @azure/static-web-apps-cli
@@ -16,11 +21,11 @@ jobs:
           cd web
           npm install
           ng build
-      # TODO: Figure out most sensible way to run a headless browser in the container
-      # - name: Test
-      #  run: |
-      #    cd web
-      #    ng test --no-watch --no-progress --browsers=ChromeHeadless
+      - name: Test
+        run: |
+          export CHROME_BIN=/usr/bin/chromium
+          cd web
+          ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
       - name: Build and deploy to preview
         if: github.ref == 'refs/heads/dev'
         run: |
