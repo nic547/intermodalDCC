@@ -97,6 +97,8 @@ button:disabled {
 
 .dialog {
     position: fixed;
+    top: 0px;
+    padding-top: 68px;
     width: 100vw;
     height: 100vh;
     z-index: 10;
@@ -112,6 +114,8 @@ button:disabled {
     background-color: var(--background-primary);
     margin: var(--padding);
     padding: var(--padding);
+    max-height: calc(100dvh - 2 * var(--padding) - 68px);
+    overflow-y: auto;
 }
 
 article {

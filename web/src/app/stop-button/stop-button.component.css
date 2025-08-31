@@ -4,7 +4,6 @@
   align-items: center;
   width: 100%;
   position: relative;
-  z-index: 100;
 }
 
 .stop-button {
@@ -13,6 +12,7 @@
   width: 100%;
   max-width: 300px;
   height: 60px;
+  z-index: 100;
 }
 
 .stop-button.track-off {
