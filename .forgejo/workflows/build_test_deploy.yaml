@@ -1,0 +1,37 @@
+on: [push]
+jobs:
+  print-content:
+    runs-on: docker
+    container:
+      image: node:24
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup global tools
+        run: |
+          npm install -g @angular/cli
+          npm install -g @azure/static-web-apps-cli
+      - name: Build
+        run: |
+          cd web
+          npm install
+          ng build
+      # TODO: Figure out most sensible way to run a headless browser in the container
+      # - name: Test
+      #  run: |
+      #    cd web
+      #    ng test --no-watch --no-progress --browsers=ChromeHeadless
+      - name: Build and deploy to preview
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          cd web
+          npm run patch-webmanifest "imDCC PRE" "intermodalDCC PREVIEW"
+          ng build
+          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_PREVIEW_TOKEN }}
+      - name: Build and deploy to prod
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd web
+          npm run patch-webmanifest "imDCC" "intermodalDCC"
+          ng build
+          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_TOKEN }}
