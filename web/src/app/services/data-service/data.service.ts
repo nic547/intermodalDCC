@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { type DBSchema, type IDBPDatabase, openDB } from 'idb';
-import { DccFunction, PersistenEngine } from '../../engine/types';
+import { DccFunction, PersistentEngine } from '../../engine/types';
 
 @Injectable({
     providedIn: 'root',
@@ -18,21 +18,21 @@ export class DataService {
         console.log('Database upgrade complete');
     };
 
-    async getEngine(key: string): Promise<PersistenEngine | null> {
+    async getEngine(key: string): Promise<PersistentEngine | null> {
         const engineObject = await this.db?.get('engines', key);
         return this.rehydrateEngine(engineObject);
     }
 
-    async addOrUpdateEngine(engine: PersistenEngine): Promise<void> {
+    async addOrUpdateEngine(engine: PersistentEngine): Promise<void> {
         engine.lastUsed = new Date();
         await this.db?.put('engines', engine, engine.id);
     }
 
-    async updateLastUsed(engine: PersistenEngine): Promise<void> {
+    async updateLastUsed(engine: PersistentEngine): Promise<void> {
         await this.db?.put('engines', engine, engine.id);
     }
 
-    async deleteEngine(engine: PersistenEngine): Promise<void> {
+    async deleteEngine(engine: PersistentEngine): Promise<void> {
         await this.db?.delete('engines', engine.id);
     }
 
@@ -40,7 +40,7 @@ export class DataService {
         searchTerm = '',
         sortKey: 'lastUsed' | 'name' | 'created' | 'address' = 'lastUsed',
         desc = true,
-    ): Promise<PersistenEngine[]> {
+    ): Promise<PersistentEngine[]> {
         const engines = (await this.db?.getAll('engines'))
             ?.filter((engine) => engine.name.includes(searchTerm) || engine.tags.some((tag) => tag.includes(searchTerm)))
             ?.sort((a, b) => {
@@ -52,11 +52,11 @@ export class DataService {
     }
 
     /** Tries to ensure that the stored data object gets turned into a "real" PersistentEngine with functions and up-to-date properties  */
-    private rehydrateEngine(engine: PersistenEngine): PersistenEngine;
-    private rehydrateEngine(engine: PersistenEngine | undefined | null): PersistenEngine | null;
-    private rehydrateEngine(engine: PersistenEngine | undefined | null): PersistenEngine | null {
+    private rehydrateEngine(engine: PersistentEngine): PersistentEngine;
+    private rehydrateEngine(engine: PersistentEngine | undefined | null): PersistentEngine | null;
+    private rehydrateEngine(engine: PersistentEngine | undefined | null): PersistentEngine | null {
         if (!engine) return null;
-        const instance = new PersistenEngine();
+        const instance = new PersistentEngine();
 
         // Only copy properties that exist in the class prototype
         const prototypeKeys = Object.getOwnPropertyNames(Object.getPrototypeOf(instance));
@@ -86,6 +86,6 @@ export class DataService {
 interface appDb extends DBSchema {
     engines: {
         key: string;
-        value: PersistenEngine;
+        value: PersistentEngine;
     };
 }

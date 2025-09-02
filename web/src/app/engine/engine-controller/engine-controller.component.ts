@@ -5,7 +5,7 @@ import { BLEServiceToken } from '../../services/ble-service/ble.interface';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
 import { IconModule } from '../../ui/icon.module';
-import { type Engine, PersistenEngine as PersistentEngine, SimpleEngine } from '../types';
+import { type Engine, PersistentEngine as PersistentEngine, SimpleEngine } from '../types';
 
 @Component({
     selector: 'app-engine-controller',
