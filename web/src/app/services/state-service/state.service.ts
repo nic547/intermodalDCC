@@ -1,5 +1,5 @@
 import { Injectable, type WritableSignal, signal } from '@angular/core';
-import type { Engine, PersistenEngine } from '../../engine/types';
+import type { Engine, PersistentEngine } from '../../engine/types';
 @Injectable({
     providedIn: 'root',
 })
@@ -10,7 +10,7 @@ export class StateService {
         return this.activeEnginesSignal.asReadonly();
     }
 
-    public editingEngine: WritableSignal<PersistenEngine | null> = signal(null);
+    public editingEngine: WritableSignal<PersistentEngine | null> = signal(null);
 
     public activateEngine(engine: Engine): void {
         if (this.activeEnginesSignal().includes(engine)) {
