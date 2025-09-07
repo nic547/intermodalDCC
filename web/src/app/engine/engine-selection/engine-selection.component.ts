@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
-import { type Engine, PersistenEngine as PersistentEngine } from '../types';
+import { type Engine, PersistentEngine as PersistentEngine } from '../types';
 
 import { FormsModule } from '@angular/forms';
 import { TransferService } from '../../services/transfer-service/transfer.service';
