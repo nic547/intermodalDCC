@@ -1,7 +1,7 @@
 export class Session {
-    data: Uint32Array;
+    data: Uint32Array<ArrayBuffer>;
 
-    static FromBuffer(buffer: ArrayBuffer): Session {
+    static FromBuffer(buffer: ArrayBufferLike): Session {
         const session = new Session();
         const view = new DataView(buffer);
         for (let i = 0; i < 4; i++) {
