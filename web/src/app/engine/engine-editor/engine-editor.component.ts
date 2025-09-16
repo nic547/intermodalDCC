@@ -5,6 +5,7 @@ import { DccFunction, PersistentEngine } from '../types';
 
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
+import { PdfExtractionService } from '../../services/pdf-extraction/pdf-extraction.service';
 
 @Component({
     selector: 'app-engine-editor',
@@ -15,6 +16,7 @@ import { IconModule } from '../../ui/icon.module';
 export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
+    private pdfExtractionService = inject(PdfExtractionService);
 
     public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 
@@ -96,5 +98,28 @@ export class EngineEditorComponent implements OnInit {
     removeFunction() {
         this.numberOfFunctions--;
         this.handleFunctionNumberChange();
+    }
+
+    async importFunctionPdf() {
+        const pickerOpts: OpenFilePickerOptions = {
+            types: [
+                {
+                    description: '.pdf',
+                    accept: {
+                        'application/pdf': ['.pdf'],
+                    },
+                },
+            ],
+            excludeAcceptAllOption: true,
+            multiple: false,
+        };
+
+
+        const fileHandlers = await window.showOpenFilePicker(pickerOpts);
+        if (fileHandlers.length > 0) {
+            const fileHandler = fileHandlers[0];
+            const file = await fileHandler.getFile();
+            await this.pdfExtractionService.tryLoadFunctions(file);
+        }
     }
 }
