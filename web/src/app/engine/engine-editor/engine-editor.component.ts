@@ -1,7 +1,7 @@
 import { type AfterViewInit, Component, type ElementRef, type OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
-import { DccFunction, PersistenEngine } from '../types';
+import { DccFunction, PersistentEngine } from '../types';
 
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
@@ -16,7 +16,7 @@ export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
 
-    public engine: PersistenEngine = new PersistenEngine(); //Placeholder to not screw around with null/undefined
+    public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 
     public tagInput = '';
 
@@ -41,7 +41,7 @@ export class EngineEditorComponent implements OnInit {
 
             const activeEngine = this.stateService
                 .activeEngines()
-                .find((e) => e instanceof PersistenEngine && e.id === existingEngine.id) as PersistenEngine;
+                .find((e) => e instanceof PersistentEngine && e.id === existingEngine.id) as PersistentEngine;
             if (activeEngine) {
                 activeEngine.updateWith(existingEngine);
             } else {

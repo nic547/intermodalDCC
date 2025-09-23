@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { PersistenEngine } from '../../engine/types';
+import { PersistentEngine } from '../../engine/types';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TransferService {
-    public async exportEngine(engine: PersistenEngine): Promise<string> {
+    public async exportEngine(engine: PersistentEngine): Promise<string> {
         const json = JSON.stringify([engine]);
         return await this.compressString(json);
     }
 
-    public async exportEngines(engines: PersistenEngine[]): Promise<string> {
+    public async exportEngines(engines: PersistentEngine[]): Promise<string> {
         const json = JSON.stringify(engines);
         return await this.compressString(json);
     }
@@ -27,7 +27,8 @@ export class TransferService {
 
         return compressedBase64;
     }
-    public async importEngine(file: File): Promise<PersistenEngine[]> {
+
+    public async importEngine(file: File): Promise<PersistentEngine[]> {
         const arrayBuffer = await file.arrayBuffer();
         const compressedData = new Uint8Array(arrayBuffer);
 
@@ -46,10 +47,10 @@ export class TransferService {
             // Parse the JSON into an array of PersistentEngine objects
             const engineDataArray = JSON.parse(jsonText);
 
-            const engines: PersistenEngine[] = [];
+            const engines: PersistentEngine[] = [];
 
             for (const engineData of engineDataArray) {
-                const engine = new PersistenEngine();
+                const engine = new PersistentEngine();
 
                 // Copy properties from imported data to the new engine
                 Object.assign(engine, engineData);

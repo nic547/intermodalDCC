@@ -7,7 +7,7 @@ export abstract class Engine {
 
 export class SimpleEngine extends Engine {}
 
-export class PersistenEngine extends Engine {
+export class PersistentEngine extends Engine {
     id: string = crypto.randomUUID();
     public name = '';
     public notes = '';
@@ -17,7 +17,7 @@ export class PersistenEngine extends Engine {
     public lastUsed: Date = new Date();
     public lastActiveSession: string | null = null;
 
-    updateWith(updatedEngine: PersistenEngine) {
+    updateWith(updatedEngine: PersistentEngine) {
         this.name = updatedEngine.name;
         this.notes = updatedEngine.notes;
         this.tags = updatedEngine.tags;
@@ -30,7 +30,7 @@ export class PersistenEngine extends Engine {
 
 export class DccFunction {
     static create(number: number) {
-        const f = new DccFunction();
+        const f = new DccFunction;
         f.number = number;
         return f;
     }

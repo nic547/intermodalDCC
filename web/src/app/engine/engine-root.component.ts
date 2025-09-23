@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { StateService } from '../services/state-service/state.service';
-import { DccFunction, PersistenEngine, SimpleEngine } from './types';
+import { DccFunction, PersistentEngine, SimpleEngine } from './types';
 
 import { state } from '@angular/animations';
 import { EngineControllerComponent } from './engine-controller/engine-controller.component';
@@ -27,7 +27,7 @@ export class EngineRootComponent {
     }
 
     async createPersistentEngine() {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         this.stateService.editingEngine.set(engine);
     }
 

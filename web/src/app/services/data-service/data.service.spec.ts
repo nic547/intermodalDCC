@@ -1,6 +1,6 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DccFunction, PersistenEngine } from '../../engine/types';
+import { DccFunction, PersistentEngine } from '../../engine/types';
 import { DataService } from './data.service';
 
 describe('DataService', () => {
@@ -21,7 +21,7 @@ describe('DataService', () => {
     });
 
     it('should save engines', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
 
         await service.addOrUpdateEngine(engine);
 
@@ -30,15 +30,15 @@ describe('DataService', () => {
     });
 
     it('should return saved engines with the correct type', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         await service.addOrUpdateEngine(engine);
 
         const engines = await service.getEngines();
-        expect(engines[0]).toBeInstanceOf(PersistenEngine);
+        expect(engines[0]).toBeInstanceOf(PersistentEngine);
     });
 
     it('should delete engines when requested', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         await service.addOrUpdateEngine(engine);
         let engines = await service.getEngines();
         expect(engines.length).toBe(1);
@@ -49,7 +49,7 @@ describe('DataService', () => {
     });
 
     it('stored functions should have a display name', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         engine.functions.push(DccFunction.create(0));
         await service.addOrUpdateEngine(engine);
 
@@ -58,7 +58,7 @@ describe('DataService', () => {
     });
 
     it('invalid key should return null', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         await service.addOrUpdateEngine(engine);
 
         const loadedEngine = await service.getEngine('1234567890');
@@ -66,7 +66,7 @@ describe('DataService', () => {
     });
 
     it('getting an engine by its key should return the correct engine', async () => {
-        const engine = new PersistenEngine();
+        const engine = new PersistentEngine();
         engine.name = 'Test Engine';
         await service.addOrUpdateEngine(engine);
 
