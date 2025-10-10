@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { FontUnicodeMapping } from './font-unicode-mapping';
+import { FontUnicodeTranslator} from './font-unicode-translator';
 
 type ObjectMap = Map<number, number>
+type FontUnicodeTranslatorMap = Map<string, FontUnicodeTranslator>
 
 const CHAR_e = 101;
 const CHAR_n = 110;
@@ -30,8 +31,10 @@ export class PdfExtractionService {
     await Promise.all(
     pages.map(async pageObjNr => {
       let pageStartByte = xrefData.objects.get(pageObjNr) ?? 0;
-      let content = await this.parsePageContent(array, pageStartByte, xrefData.objects);
-      let text = content.map(c => this.extractText(c)).join('|');
+      let [content, fontMappings] = await this.parsePageContent(array, pageStartByte, xrefData.objects);
+      let currentFont = { value: null as FontUnicodeTranslator | null };
+      let text = content.map(c => this.extractText(c, fontMappings, currentFont)).join('|');
+      console.log('PAGE TEXT', text);
     })
   );
 
@@ -165,7 +168,7 @@ export class PdfExtractionService {
     return kids;
   }
 
-  async parsePageContent(array: Uint8Array, startByte: number, objectMap: ObjectMap): Promise<string[]> {
+  async parsePageContent(array: Uint8Array, startByte: number, objectMap: ObjectMap): Promise<[string[], FontUnicodeTranslatorMap]> {
     let endByte = this.findObjectEnd(array, startByte);
     let objectBytes = array.slice(startByte, endByte);
     let objectText = new TextDecoder().decode(objectBytes);
@@ -176,13 +179,22 @@ export class PdfExtractionService {
     console.debug('CONTENTS OBJECT ID', contentsObjectId);
 
     let fontMatch = objectText.match(/\/Font<<(.*?)>>/);
-    let fontDefinitions = fontMatch?.[1].matchAll(/(?<name>\w+) (?<nr>\d+) (?<gen>\d+) R/g);
+    let fontDefinitions = [...fontMatch?.[1].matchAll(/(?<name>\w+) (?<nr>\d+) (?<gen>\d+) R/g) ?? []];
+
+    let fontMappings = new Map<string, FontUnicodeTranslator>();
+
+    for (const fontDef of fontDefinitions) {
+      console.log('FONT DEFINITION', fontDef.groups?.['name'], fontDef.groups?.['nr']);
+      let fontObjNr = Number(fontDef.groups?.['nr'] ?? '0');
+      let fontUnicodeMapping = await this.parseFontUnicodeMapping(array, fontObjNr, objectMap);
+      fontMappings.set(fontDef.groups?.['name'] ?? '', fontUnicodeMapping);
+    }
 
 
 
     let contentsOffset = contentsObjectId.map(id => objectMap.get(id) ?? 0);
     let content = await Promise.all(contentsOffset.map(async offset => await this.parseContent(array, offset)));
-    return content;
+    return [content, fontMappings];
   }
 
   async parseContent(array: Uint8Array, startByte: number): Promise<string> {
@@ -204,34 +216,56 @@ export class PdfExtractionService {
     }
   }
 
-  async parseFontUnicodeMapping(array: Uint8Array, objNr: number, objectMap: ObjectMap): Promise<FontUnicodeMapping> {
+  async parseFontUnicodeMapping(array: Uint8Array, objNr: number, objectMap: ObjectMap): Promise<FontUnicodeTranslator> {
     let fontStartByte = objectMap.get(objNr) ?? 0;
-    let fontContent = this.parseContent(array, fontStartByte)
+    let fontContent = await this.parseContent(array, fontStartByte)
 
-    return new FontUnicodeMapping();
+    var translator = new FontUnicodeTranslator();
+
+    let toUnicodeMatch = fontContent.match(/\/ToUnicode\s+(\d+)\s+0\s+R/);
+    let toUnicodeObjNr = Number(toUnicodeMatch?.[1] ?? '0');
+    if (toUnicodeObjNr != 0) {
+      let toUnicodeStartByte = objectMap.get(toUnicodeObjNr) ?? 0;
+      let toUnicodeContent = await this.parseContent(array, toUnicodeStartByte);
+      
+      let bfcharMatch = toUnicodeContent.match(/beginbfchar(.*?)endbfchar/s)
+      bfcharMatch?.[0].split('\n').slice(1, -1).forEach(line => translator.AddEntry(line.trim()));
+    }
+
+    return translator;
 
   }
 
-  extractText(content: string): string {
-    let matches = content.matchAll(/\(.*\)Tj|\[.*\]TJ/g);
+  extractText(content: string, translatorMap: FontUnicodeTranslatorMap, currentFont: {value: FontUnicodeTranslator | null}): string {
+    let matches = content.matchAll(/(.*)(Tj|TJ|Tf)/g);
     let text = '';
     for (const match of matches) {
-      let textSlugs = match[0].matchAll(/\(.*?\)|\<.*?\>/g);
+
+      if (match[2] === 'Tf') {
+        let fontMatch = match[1].match(/\/(\S+)/);
+        if (fontMatch?.[1]) {
+          currentFont.value = translatorMap.get(fontMatch[1]) ?? null;
+        }
+        continue;
+      }
+
+      let textSlugs = match[1].matchAll(/\(.*?\)|\<.*?\>/g);
       for (const slug of textSlugs) {
         if (slug[0].startsWith('(') && slug[0].endsWith(')')) {
           text += slug[0].slice(1, -1);
         } else if (slug[0].startsWith('<') && slug[0].endsWith('>')) {
-          //TODO: Use Font's Character Map to decode hex to string
-          let hex = slug[0].slice(1, -1);
-          let str = '';
-          for (let i = 0; i < hex.length; i += 4) {
-            let code = parseInt(hex.substr(i, 4), 16);
-            str += String.fromCharCode(code);
+          let str = currentFont.value?.Decode(slug[0]);
+          text += str ?? '';
+          if (str === undefined) {
+            debugger;
           }
-          text += str;
         }
       }
+      text = text.replaceAll(/\\[0-7]{3}/g, (match) => String.fromCharCode(parseInt(match.slice(1), 8)));
+      text += ' ';
     }
+
+
     return text;
   }
 
