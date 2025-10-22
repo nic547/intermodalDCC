@@ -138,6 +138,11 @@ article {
     flex-direction: row;
 }
 
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
 div.input {
     position: relative;
 
