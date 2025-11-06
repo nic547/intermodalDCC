@@ -5,7 +5,7 @@ import { DccFunction, PersistentEngine } from '../types';
 
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
-import { PdfExtractionService } from '../../services/pdf-extraction/pdf-extraction.service';
+import { ManualParsingService } from '../../services/manual-parsing-service/manual-parsing.service';
 
 @Component({
     selector: 'app-engine-editor',
@@ -16,7 +16,7 @@ import { PdfExtractionService } from '../../services/pdf-extraction/pdf-extracti
 export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
-    private pdfExtractionService = inject(PdfExtractionService);
+    private manualParsingService = inject(ManualParsingService);
 
     public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 
@@ -119,7 +119,24 @@ export class EngineEditorComponent implements OnInit {
         if (fileHandlers.length > 0) {
             const fileHandler = fileHandlers[0];
             const file = await fileHandler.getFile();
-            await this.pdfExtractionService.tryLoadFunctions(file);
+
+            const result = await this.manualParsingService.parseManual(file);
+
+            if (result instanceof Error) {
+                console.error('Error parsing manual:', result.message);
+                return;
+            }
+
+            var highestFunctionNumber = Math.max(...result.map(f => f.number), 0);
+
+            if (this.engine.functions.length < highestFunctionNumber + 1) {
+                this.numberOfFunctions = highestFunctionNumber + 1;
+                this.handleFunctionNumberChange();
+            }
+            for (let parsedFunction of result) {
+                const existingFunction = this.engine.functions.find(f => f.number === parsedFunction.number);
+                existingFunction!.description = parsedFunction.description;
+            }
         }
     }
 }

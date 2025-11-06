@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PdfExtractionService } from './pdf-extraction.service';
+import { PdfService } from './pdf.service';
 import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('PdfExtractionService', () => {
-  let service: PdfExtractionService;
+  let service: PdfService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideZonelessChangeDetection()],
     });
-    service = TestBed.inject(PdfExtractionService);
+    service = TestBed.inject(PdfService);
   });
 
   it('should be created', () => {

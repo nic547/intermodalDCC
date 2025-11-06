@@ -15,26 +15,23 @@ const CHAR_j = 106;
   providedIn: 'root'
 })
 
-export class PdfExtractionService {
-  async tryLoadFunctions(file: File) {
+export class PdfService {
+  async tryLoadPages(file: File): Promise<string[] | Error> {
 
     const arrayBuffer = await file.arrayBuffer();
     const array = new Uint8Array(arrayBuffer);
     let xrefByteoffset = this.getXrefByteOffset(array);
-    console.debug('XREF BYTE OFFSET', xrefByteoffset);
-
     let xrefData = this.parseXrefSections(array, xrefByteoffset);
     let rootObjectStartByte = xrefData.objects.get(xrefData.rootObjectId ?? 0) ?? 0;
     let pageObjectNr = this.parseRootObject(array, rootObjectStartByte);
     let pages = this.parsePagesObject(array, xrefData.objects.get(pageObjectNr) ?? 0);
 
-    await Promise.all(
+    return await Promise.all(
     pages.map(async pageObjNr => {
       let pageStartByte = xrefData.objects.get(pageObjNr) ?? 0;
       let [content, fontMappings] = await this.parsePageContent(array, pageStartByte, xrefData.objects);
       let currentFont = { value: null as FontUnicodeTranslator | null };
-      let text = content.map(c => this.extractText(c, fontMappings, currentFont)).join('|');
-      console.log('PAGE TEXT', text);
+      return content.map(c => this.extractText(c, fontMappings, currentFont)).join('|');
     })
   );
 
@@ -44,7 +41,6 @@ export class PdfExtractionService {
   private getXrefByteOffset(array: Uint8Array): number {
     const startByte = this.findIndexReverse(array, array.length - 1, 'startxref');
     const xrefText = new TextDecoder().decode(array.slice(startByte, array.length));
-    console.debug('XREF TEXT', xrefText);
     const match = xrefText.match(/startxref\s+(\d+)\s+%%EOF/);
     return parseInt(match?.[1] ?? '0', 10);
   }
@@ -132,7 +128,6 @@ export class PdfExtractionService {
     let xrefData = new XrefData(rootObjectId, prevOffset, objects);
 
     if (prevOffset) {
-      console.debug('Found Prev offset, parsing previous xref section', prevOffset);
       let prevXrefData = this.parseXrefSections(array, prevOffset);
       xrefData.objects = new Map([...xrefData.objects, ...prevXrefData.objects]);
     }
@@ -148,9 +143,6 @@ export class PdfExtractionService {
     // find pages object reference
     let pagesMatch = objectText.match(/\/Pages\s+(\d+)\s+0\s+R/);
     let pagesObjectId = Number(pagesMatch?.[1]);
-    console.debug('PAGES OBJECT ID', pagesObjectId);
-
-    console.debug('ROOT OBJECT TEXT', objectText);
 
     return pagesObjectId;
   }
@@ -164,7 +156,6 @@ export class PdfExtractionService {
     let kidsText = kidsMatch?.[1] ?? '';
     let kids = kidsText.split(' ').filter((s, i) => i % 3 === 0).map(s => Number(s)) ?? [];
 
-    console.debug('KIDS OBJECT IDS', kids);
     return kids;
   }
 
@@ -176,7 +167,6 @@ export class PdfExtractionService {
     let contentsMatch = objectText.match(/\/Contents(?:\[| )(.*?)\]?(?:\/|>>)/);
     let contentsText = contentsMatch?.[1] ?? '';
     let contentsObjectId = contentsText.split(' ').filter((s, i) => i % 3 === 0).map(s => Number(s)) ?? [];
-    console.debug('CONTENTS OBJECT ID', contentsObjectId);
 
     let fontMatch = objectText.match(/\/Font<<(.*?)>>/);
     let fontDefinitions = [...fontMatch?.[1].matchAll(/(?<name>\w+) (?<nr>\d+) (?<gen>\d+) R/g) ?? []];
@@ -184,7 +174,6 @@ export class PdfExtractionService {
     let fontMappings = new Map<string, FontUnicodeTranslator>();
 
     for (const fontDef of fontDefinitions) {
-      console.log('FONT DEFINITION', fontDef.groups?.['name'], fontDef.groups?.['nr']);
       let fontObjNr = Number(fontDef.groups?.['nr'] ?? '0');
       let fontUnicodeMapping = await this.parseFontUnicodeMapping(array, fontObjNr, objectMap);
       fontMappings.set(fontDef.groups?.['name'] ?? '', fontUnicodeMapping);
