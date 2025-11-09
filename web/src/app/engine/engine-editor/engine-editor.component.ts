@@ -1,4 +1,4 @@
-import { type AfterViewInit, Component, type ElementRef, type OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, type OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
 import { DccFunction, PersistentEngine } from '../types';
@@ -17,6 +17,7 @@ export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
     private manualParsingService = inject(ManualParsingService);
+    private changeDetectorRef = inject(ChangeDetectorRef)
 
     public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 
@@ -137,6 +138,8 @@ export class EngineEditorComponent implements OnInit {
                 const existingFunction = this.engine.functions.find(f => f.number === parsedFunction.number);
                 existingFunction!.description = parsedFunction.description;
             }
+
+            this.changeDetectorRef.detectChanges();
         }
     }
 }
