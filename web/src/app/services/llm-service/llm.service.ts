@@ -11,6 +11,7 @@ export class LlmService {
   async parseFunctionText(text: string): Promise<Error | LlmFunctionOutput[]> {
     let baseUrl = this.settingsService.Settings.openAiApiUrl() ?? 'http://localhost:1234';
     let apiKey = this.settingsService.Settings.openAiApiKey() ?? '';
+    let model = this.settingsService.Settings.openAiModel() ?? 'qwen/qwen3-4b-2507';
 
     var result = await fetch(baseUrl + "/v1/chat/completions", {
       method: "POST",
@@ -19,7 +20,7 @@ export class LlmService {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "qwen/qwen3-4b-2507",
+        model: model,
         messages: [
           {
             role: "system",

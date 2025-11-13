@@ -7,7 +7,21 @@
     </div>
     <div class="input">
       <label>API URL</label>
-      <input type="text" />
+      <input type="text" [(ngModel)]="Settings.openAiApiUrl" />
     </div>
+    <div class="input">
+      <label>API Key</label>
+      <input type="text" [(ngModel)]="Settings.openAiApiKey" />
+    </div>
+    <div  class="input">
+      <label>Model</label>
+      <input type="text" [(ngModel)]="Settings.openAiModel" />
+    </div>
+
+    <nav>
+      <button class="secondary" (click)="cancel()">Cancel</button>
+      <button (click)="save()">Save</button>
+    </nav>
+
   </div>
 </div>
