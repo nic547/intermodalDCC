@@ -30,7 +30,9 @@
   </div>
   <fieldset>
     <legend>Functions</legend>
-    <button appImportIcon (click)="importFunctionPdf()">Import Functions from PDF (Experimental)</button>
+    @if (settingsService.Settings.enableLLMFunctionsParser()) {
+    <button appImportIcon (click)="importFunctionPdf()">Functions from PDF</button>
+    }
     <div class=function-number-container>
       <div class="input">
         <label>Functions</label>
