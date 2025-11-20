@@ -6,6 +6,7 @@ import { DccFunction, PersistentEngine } from '../types';
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
 import { ManualParsingService } from '../../services/manual-parsing-service/manual-parsing.service';
+import { SettingsService } from '../../services/settings-service/settings.service';
 
 @Component({
     selector: 'app-engine-editor',
@@ -18,6 +19,7 @@ export class EngineEditorComponent implements OnInit {
     private dataService = inject(DataService);
     private manualParsingService = inject(ManualParsingService);
     private changeDetectorRef = inject(ChangeDetectorRef)
+    protected readonly settingsService = inject(SettingsService);
 
     public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 

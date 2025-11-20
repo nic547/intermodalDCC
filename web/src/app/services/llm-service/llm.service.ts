@@ -23,8 +23,8 @@ export class LlmService {
         model: model,
         messages: [
           {
-            role: "system",
-            content: 'You will receive a text extracted from a pdf manual for a model train. This text should contain a descriptions of available dcc functions. The functions might be out of order.  Keep in mind that functions are generally referred to with a number and "F" as a prefix. F0 is usually the first function. Some functions might be described with icons, if you cannot identify a textual description ignore it. Functions might be described in multiple languages, if this is the case only return the German texts. Example output: [ { "f": 0, "d": "Licht"},{"f":1,"d":"Sound"}] Only export the json array, no other text.'
+            role: "user",
+            content: 'You will receive a text extracted from a pdf manual for a model train. This text should contain a descriptions of available dcc functions. The functions might be out of order.  Keep in mind that functions are generally referred to with a number and "F" as a prefix. F0 is usually the first function. Some functions might be described with icons, if you cannot identify a textual description ignore it. Functions might be described in multiple languages, if this is the case only return the ' + this.getLanguage() + ' texts. Example output: [ { "f": 0, "d": "Licht"},{"f":1,"d":"Sound"}] Only export the json array, no other text.'
           },
           {
             role: "user",
@@ -45,6 +45,18 @@ export class LlmService {
     }
     else {
       return new Error("No response from LLM");
+    }
+  }
+
+  private getLanguage(): string {
+    const languageCode = this.settingsService.Settings.llmLanguage();
+    switch (languageCode) {
+      case 'de':
+        return 'German';
+      case 'en':
+        return 'English';
+      default:
+        return 'English';
     }
   }
 }
