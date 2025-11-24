@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SettingsComponent } from './settings.component';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('SettingsComponent', () => {
   let component: SettingsComponent;
@@ -8,9 +9,10 @@ describe('SettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettingsComponent]
+      imports: [SettingsComponent],
+      providers: [provideZonelessChangeDetection()]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(SettingsComponent);
     component = fixture.componentInstance;
