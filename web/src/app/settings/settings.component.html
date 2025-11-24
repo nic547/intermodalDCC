@@ -1,0 +1,65 @@
+<div class="dialog">
+  <div class="dialog-content">
+    <h2>Settings</h2>
+    <fieldset>
+      <label>AI Functions Parser</label>
+
+      <div class="align-center">
+        <input type="checkbox" [(ngModel)]="Settings.enableLLMFunctionsParser" />
+        <label>Enable parsing functions from PDF-Files</label>
+      </div>
+      @if (Settings.enableLLMFunctionsParser()) {
+
+      <p>
+        This is a very experimental feature and the usual AI/LLM disclaimers apply.
+      </p>
+
+      <p>
+        To reduce token usage, improve performance and reduce reliance on specific providers with pdf processing
+        capabilities, this feature includes a minimal pdf parser and some heuristics to extract data.
+        This is work in progress and will fail for many pdfs. <a
+          href="https://codeberg.org/nic547/intermodalDCC/issues">Please report Bugs here</a>.
+      </p>
+
+      <p>
+        There is no included AI Interference provider (for cost reasons). You need to "Bring Your Own Model".
+        intermodalDCC uses the openAI API, which has ended up as a sort of de-facto-standard with many providers
+        offering compatible services. There's is also a variety of local tools providing a openAI compatible API.
+      </p>
+
+      <p>
+        These tasks do generally not require the largest models and snappy responses make for a better experience.
+        <br />
+        Recommendations:<br />
+        Local: LM Studio with qwen3-4B-2507-instruct<br />
+        Cloud: Google AI Studio (Free Tier) wtih gemini-2.5-flash-lite
+      </p>
+
+      <div class="align-center">
+        <label>Language</label>
+        <select [(ngModel)]="Settings.llmLanguage">
+          @for (lang of languages; track lang) {
+          <option [value]="lang">{{lang}}</option>
+          }
+        </select>
+      </div>
+      <div class="input">
+        <label>API URL</label>
+        <input type="text" [(ngModel)]="Settings.openAiApiUrl" />
+      </div>
+      <div class="input">
+        <label>API Key</label>
+        <input type="text" [(ngModel)]="Settings.openAiApiKey" />
+      </div>
+      <div class="input">
+        <label>Model</label>
+        <input type="text" [(ngModel)]="Settings.openAiModel" />
+      </div>}
+    </fieldset>
+    <nav>
+      <button class="secondary" (click)="cancel()">Cancel</button>
+      <button (click)="save()">Save</button>
+    </nav>
+
+  </div>
+</div>

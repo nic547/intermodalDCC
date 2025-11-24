@@ -2,14 +2,15 @@ import { Component, inject, signal } from '@angular/core';
 import { StateService } from '../services/state-service/state.service';
 import { DccFunction, PersistentEngine, SimpleEngine } from './types';
 
-import { state } from '@angular/animations';
 import { EngineControllerComponent } from './engine-controller/engine-controller.component';
 import { EngineEditorComponent } from './engine-editor/engine-editor.component';
 import { EngineSelectionComponent } from './engine-selection/engine-selection.component';
+import { SettingsComponent } from '../settings/settings.component';
+
 
 @Component({
     selector: 'app-engine-root',
-    imports: [EngineControllerComponent, EngineSelectionComponent, EngineEditorComponent],
+    imports: [EngineControllerComponent, EngineSelectionComponent, EngineEditorComponent, SettingsComponent],
     templateUrl: './engine-root.component.html',
     styleUrl: './engine-root.component.css',
 })
@@ -33,5 +34,9 @@ export class EngineRootComponent {
 
     async selectEngine() {
         this.showSelection.set(true);
+    }
+
+    async openSettings() {
+        this.stateService.showSettings.set(true);
     }
 }

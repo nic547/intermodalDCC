@@ -1,10 +1,12 @@
-import { type AfterViewInit, Component, type ElementRef, type OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, type OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
 import { DccFunction, PersistentEngine } from '../types';
 
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
+import { ManualParsingService } from '../../services/manual-parsing-service/manual-parsing.service';
+import { SettingsService } from '../../services/settings-service/settings.service';
 
 @Component({
     selector: 'app-engine-editor',
@@ -15,6 +17,9 @@ import { IconModule } from '../../ui/icon.module';
 export class EngineEditorComponent implements OnInit {
     private stateService = inject(StateService);
     private dataService = inject(DataService);
+    private manualParsingService = inject(ManualParsingService);
+    private changeDetectorRef = inject(ChangeDetectorRef)
+    protected readonly settingsService = inject(SettingsService);
 
     public engine: PersistentEngine = new PersistentEngine(); //Placeholder to not screw around with null/undefined
 
@@ -96,5 +101,47 @@ export class EngineEditorComponent implements OnInit {
     removeFunction() {
         this.numberOfFunctions--;
         this.handleFunctionNumberChange();
+    }
+
+    async importFunctionPdf() {
+        const pickerOpts: OpenFilePickerOptions = {
+            types: [
+                {
+                    description: '.pdf',
+                    accept: {
+                        'application/pdf': ['.pdf'],
+                    },
+                },
+            ],
+            excludeAcceptAllOption: true,
+            multiple: false,
+        };
+
+
+        const fileHandlers = await window.showOpenFilePicker(pickerOpts);
+        if (fileHandlers.length > 0) {
+            const fileHandler = fileHandlers[0];
+            const file = await fileHandler.getFile();
+
+            const result = await this.manualParsingService.parseManual(file);
+
+            if (result instanceof Error) {
+                console.error('Error parsing manual:', result.message);
+                return;
+            }
+
+            var highestFunctionNumber = Math.max(...result.map(f => f.number), 0);
+
+            if (this.engine.functions.length < highestFunctionNumber + 1) {
+                this.numberOfFunctions = highestFunctionNumber + 1;
+                this.handleFunctionNumberChange();
+            }
+            for (let parsedFunction of result) {
+                const existingFunction = this.engine.functions.find(f => f.number === parsedFunction.number);
+                existingFunction!.description = parsedFunction.description;
+            }
+
+            this.changeDetectorRef.detectChanges();
+        }
     }
 }
