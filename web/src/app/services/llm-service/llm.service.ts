@@ -13,7 +13,11 @@ export class LlmService {
     let apiKey = this.settingsService.Settings.openAiApiKey() ?? '';
     let model = this.settingsService.Settings.openAiModel() ?? 'qwen/qwen3-4b-2507';
 
-    var result = await fetch(baseUrl + "/v1/chat/completions", {
+    if (!baseUrl.endsWith('/')) {
+      baseUrl += '/';
+    }
+
+    var result = await fetch(baseUrl + "chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,6 +25,7 @@ export class LlmService {
       },
       body: JSON.stringify({
         model: model,
+        max_tokens: 1024,
         messages: [
           {
             role: "user",
