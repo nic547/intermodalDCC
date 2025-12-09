@@ -1,22 +1,20 @@
 import { inject, Injectable } from '@angular/core';
-import { PdfService } from '../pdf-service/pdf.service';
 import { LlmService } from '../llm-service/llm.service';
-import { ParsedFunction } from './manual-parsing.types';
 import { DccFunction } from '../../engine/types';
+import { PDFParse } from 'pdf-parse';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManualParsingService {
 
-  pdfService = inject(PdfService);
   llmService = inject(LlmService);
 
   async parseManual(file: File): Promise<DccFunction[] | Error> {
-    let pages = await this.pdfService.tryLoadPages(file);
-    if (pages instanceof Error) {
-      return pages;
-    }
+
+    PDFParse.setWorker('/assets/pdf.worker.mjs');
+    let parser = await new PDFParse({ data: await file.arrayBuffer() });
+    let pages = (await parser.getText()).pages.map(page => page.text);
     let scores = this.scorePages(pages);
     let maxScore = Math.max(...scores);
 
@@ -37,7 +35,8 @@ export class ManualParsingService {
     }
 
     if (bestPages.length === 1) {
-      return await this.llmService.parseFunctionText(bestPages[0]);
+      return await this.llmService.parseFunctionText(
+        bestPages[0]);
     }
 
     return Error("Not implemented yet.");
