@@ -12,8 +12,3 @@ export type OAIChatCompletionResponse = {
         finish_reason: string;
     }>;
 }
-
-export type LlmFunctionOutput =  {
-    f: number;
-    d: string;
-}

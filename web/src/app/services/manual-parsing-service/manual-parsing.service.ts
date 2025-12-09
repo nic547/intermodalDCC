@@ -37,11 +37,7 @@ export class ManualParsingService {
     }
 
     if (bestPages.length === 1) {
-      var functions = await this.llmService.parseFunctionText(bestPages[0]);
-      if (functions instanceof Error) {
-        return functions;
-      }
-      return functions.map(f => DccFunction.create(f.f, f.d));
+      return await this.llmService.parseFunctionText(bestPages[0]);
     }
 
     return Error("Not implemented yet.");
