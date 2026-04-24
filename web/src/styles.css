@@ -43,6 +43,10 @@ body {
     overscroll-behavior-y: contain;
 }
 
+html {
+    overscroll-behavior-y: contain;
+}
+
 button,
 input::file-selector-button {
     background-color: var(--color-primary);
