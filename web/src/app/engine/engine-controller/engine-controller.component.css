@@ -52,10 +52,6 @@
         outline: none;
     }
 
-    &:hover {
-        filter: brightness(1.1);
-    }
-
     &::-webkit-slider-runnable-track {
         width: 1em;
         cursor: pointer;
@@ -71,6 +67,14 @@
         cursor: pointer;
         -webkit-appearance: none;
         transform: translateX(-25%);
+    }
+
+    &::-webkit-slider-thumb:hover {
+        filter: brightness(1.1);
+    }
+
+    &::-webkit-slider-thumb:active {
+        filter: brightness(0.75);
     }
 }
 
@@ -96,6 +100,6 @@
     grid-area: emergency;
 }
 
-#editclosediv > button {
+#editclosediv>button {
     margin-right: 0px;
 }
