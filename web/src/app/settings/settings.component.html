@@ -2,6 +2,15 @@
   <div class="dialog-content">
     <h2>Settings</h2>
     <fieldset>
+      <label>
+        General Settings
+      </label>
+      <div class="align-center">
+        <input type="checkbox" [(ngModel)]="Settings.leftHandedThrottle" />
+        <label>Move throttle to the left</label>
+      </div>
+    </fieldset>
+    <fieldset>
       <label>AI Functions Parser</label>
 
       <div class="align-center">

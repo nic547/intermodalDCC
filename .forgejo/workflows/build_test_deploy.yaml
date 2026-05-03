@@ -39,6 +39,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cd web
-          npm run patch-webmanifest "imDCC" "intermodalDCC"
+          npm run patch-webmanifest "intermodalDCC" "intermodalDCC"
           ng build
           npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_TOKEN }} --env production

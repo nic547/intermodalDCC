@@ -9,6 +9,8 @@ export class SettingsDto {
     public openAiApiUrl?: string;
     public openAiApiKey?: string;
     public openAiModel?: string;
+
+    public leftHandedThrottle = false;
 }
 
 export class Settings {
@@ -19,6 +21,8 @@ export class Settings {
     public openAiApiKey = signal<string | undefined>(undefined);
     public openAiModel = signal<string | undefined>(undefined);
 
+    public leftHandedThrottle = signal(false)
+
     public toDto(): SettingsDto {
         return {
             enableLLMFunctionsParser: this.enableLLMFunctionsParser(),
@@ -26,6 +30,7 @@ export class Settings {
             openAiApiUrl: this.openAiApiUrl(),
             openAiApiKey: this.openAiApiKey(),
             openAiModel: this.openAiModel(),
+            leftHandedThrottle: this.leftHandedThrottle(),
         };
     }
 
@@ -35,6 +40,7 @@ export class Settings {
         this.openAiApiUrl.set(dto.openAiApiUrl ?? undefined);
         this.openAiApiKey.set(dto.openAiApiKey ?? undefined);
         this.openAiModel.set(dto.openAiModel ?? undefined);
+        this.leftHandedThrottle.set(dto.leftHandedThrottle ?? false)
     }
 
     public getCopy(): Settings {
