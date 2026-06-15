@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { inject } from '@angular/core';
 
 import { BLEServiceToken } from '../services/ble-service/ble.interface';
@@ -7,6 +7,7 @@ import { BLEServiceToken } from '../services/ble-service/ble.interface';
     selector: 'app-ble-setup',
     imports: [],
     templateUrl: './ble-setup.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './ble-setup.component.css',
 })
 export class BLESetupComponent {

@@ -1,4 +1,4 @@
-import { type AfterContentInit, Component, type ElementRef, type OnInit, ViewChild, computed, inject, input, signal } from '@angular/core';
+import { type AfterContentInit, Component, type ElementRef, type OnInit, ViewChild, computed, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { BLEServiceToken } from '../../services/ble-service/ble.interface';
@@ -11,6 +11,7 @@ import { type Engine, PersistentEngine as PersistentEngine, SimpleEngine } from 
     selector: 'app-engine-controller',
     imports: [FormsModule, IconModule],
     templateUrl: './engine-controller.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './engine-controller.component.css',
 })
 export class EngineControllerComponent implements OnInit, AfterContentInit {

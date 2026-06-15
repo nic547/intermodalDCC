@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BLEServiceToken } from '../services/ble-service/ble.interface';
 
 @Component({
   selector: 'app-stop-button',
   imports: [],
   templateUrl: './stop-button.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './stop-button.component.css'
 })
 export class StopButtonComponent {
