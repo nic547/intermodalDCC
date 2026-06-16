@@ -8,10 +8,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update package sources and install chromium
-        run: |
-          apt-get update
-          apt-get install -y chromium
       - name: Setup global tools from npm
         run: |
           npm install -g @angular/cli
@@ -21,11 +17,16 @@ jobs:
           cd web
           npm install
           ng build
+      
+      - name: Setup Test Environment
+        run: |
+          cd web
+          npx playwright install-deps
+          npx playwright install
       - name: Test
         run: |
-          export CHROME_BIN=/usr/bin/chromium
           cd web
-          ng test --no-watch --no-progress --browsers=ChromeHeadlessNoSandbox
+          ng test --no-watch --no-progress
       - name: Build and deploy to preview
         if: github.ref == 'refs/heads/dev'
         # the preview static site is seperate from the "prod" one to be able to set a custom domain
