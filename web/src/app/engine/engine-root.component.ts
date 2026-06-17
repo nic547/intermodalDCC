@@ -1,8 +1,7 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { StateService } from '../services/state-service/state.service';
 import { DccFunction, PersistentEngine, SimpleEngine } from './types';
 
-import { state } from '@angular/animations';
 import { EngineControllerComponent } from './engine-controller/engine-controller.component';
 import { EngineEditorComponent } from './engine-editor/engine-editor.component';
 import { EngineSelectionComponent } from './engine-selection/engine-selection.component';
@@ -11,7 +10,6 @@ import { EngineSelectionComponent } from './engine-selection/engine-selection.co
     selector: 'app-engine-root',
     imports: [EngineControllerComponent, EngineSelectionComponent, EngineEditorComponent],
     templateUrl: './engine-root.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './engine-root.component.css',
 })
 export class EngineRootComponent {

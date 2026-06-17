@@ -1,21 +1,10 @@
 import {
-  type AfterViewInit,
   Component,
-  type ElementRef,
-  OnInit,
-  Resource,
-  Signal,
-  ViewChild,
   type WritableResource,
-  computed,
   inject,
-  input,
-  linkedSignal,
   model,
   resource,
-  signal,
-  ChangeDetectionStrategy
-} from '@angular/core';
+  signal} from '@angular/core';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
 import { type Engine, PersistentEngine as PersistentEngine } from '../types';
@@ -28,7 +17,6 @@ import { IconModule } from '../../ui/icon.module';
     selector: 'app-engine-selection',
     imports: [FormsModule, IconModule],
     templateUrl: './engine-selection.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './engine-selection.component.css',
 })
 export class EngineSelectionComponent {

@@ -1,8 +1,7 @@
-import { type AfterViewInit, Component, type ElementRef, type OnInit, ViewChild, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, type OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
 import { DccFunction, PersistentEngine } from '../types';
-
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
 
@@ -10,7 +9,6 @@ import { IconModule } from '../../ui/icon.module';
     selector: 'app-engine-editor',
     imports: [FormsModule, IconModule],
     templateUrl: './engine-editor.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './engine-editor.component.css',
 })
 export class EngineEditorComponent implements OnInit {
