@@ -1,8 +1,7 @@
-import { type AfterViewInit, Component, type ElementRef, type OnInit, ViewChild, inject } from '@angular/core';
+import { Component, type OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
 import { DccFunction, PersistentEngine } from '../types';
-
 import { DataService } from '../../services/data-service/data.service';
 import { IconModule } from '../../ui/icon.module';
 

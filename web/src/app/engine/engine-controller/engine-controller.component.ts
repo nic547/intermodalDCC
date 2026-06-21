@@ -1,6 +1,5 @@
 import { type AfterContentInit, Component, type ElementRef, type OnInit, ViewChild, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { BLEServiceToken } from '../../services/ble-service/ble.interface';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';

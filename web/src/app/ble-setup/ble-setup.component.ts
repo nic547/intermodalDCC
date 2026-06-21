@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { inject } from '@angular/core';
-
 import { BLEServiceToken } from '../services/ble-service/ble.interface';
 
 @Component({
