@@ -1,20 +1,10 @@
 import {
-    type AfterViewInit,
-    Component,
-    type ElementRef,
-    OnInit,
-    Resource,
-    Signal,
-    ViewChild,
-    type WritableResource,
-    computed,
-    inject,
-    input,
-    linkedSignal,
-    model,
-    resource,
-    signal,
-} from '@angular/core';
+  Component,
+  type WritableResource,
+  inject,
+  model,
+  resource,
+  signal} from '@angular/core';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
 import { type Engine, PersistentEngine as PersistentEngine } from '../types';
