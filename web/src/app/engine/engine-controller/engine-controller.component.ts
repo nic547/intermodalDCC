@@ -102,7 +102,9 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
         }
 
         if (availableWidthPerElement < 400) {
-            availableWidthPerElement = 400;
+            // Don't force the controller wider than the viewport,
+            // so a single engine fits on small mobile screens
+            availableWidthPerElement = Math.min(400, clientWidth);
         }
 
         document.documentElement.style.setProperty('--engine-controller-width', `${availableWidthPerElement}px`);
