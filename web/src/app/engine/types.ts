@@ -29,9 +29,10 @@ export class PersistentEngine extends Engine {
 }
 
 export class DccFunction {
-    static create(number: number) {
-        const f = new DccFunction;
+    static create(number: number, description: string = ''): DccFunction {
+        const f = new DccFunction();
         f.number = number;
+        f.description = description;
         return f;
     }
 

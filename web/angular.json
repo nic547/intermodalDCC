@@ -22,6 +22,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "pdf.worker.mjs",
+                "input": "node_modules/pdf-parse/dist/worker",
+                "output": "/assets/"
               }
             ],
             "styles": [

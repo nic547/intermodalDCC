@@ -46,3 +46,7 @@ nav {
     display: flex;
     align-items: center;
 }
+
+.dialog-content {
+    width: 90dvw;
+}

@@ -5,6 +5,10 @@
   <app-engine-editor></app-engine-editor>
 }
 
+@if (stateService.showSettings()) {
+  <app-settings></app-settings>
+}
+
 <div id="engine-container">
   @for (engine of stateService.activeEngines(); track engine) {
     <app-engine-controller
@@ -14,6 +18,7 @@
     <button (click)="selectEngine()">Select Engine</button>
     <button (click)="createPersistentEngine()">Create New Engine</button>
     <button (click)="createSimpleEngine()">Control Engine via Address</button>
+    <button (click)="openSettings()">Settings</button>
   </div>
 </div>
 

@@ -43,6 +43,10 @@ body {
     overscroll-behavior-y: contain;
 }
 
+html {
+    overscroll-behavior-y: contain;
+}
+
 button,
 input::file-selector-button {
     background-color: var(--color-primary);
@@ -107,7 +111,6 @@ button:disabled {
 }
 
 .dialog-content {
-    min-width: min(600px, 100dvw);
     border-width: 1px;
     border-radius: 0.5rem;
     border-color: var(--border-color);
@@ -116,6 +119,8 @@ button:disabled {
     padding: var(--padding);
     max-height: calc(100dvh - 2 * var(--padding) - 68px);
     overflow-y: auto;
+    justify-self: center;
+    width: min(800px, 90dvw);
 }
 
 article {
@@ -136,6 +141,11 @@ article {
     display: flex;
     align-items: center;
     flex-direction: row;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
 }
 
 div.input {

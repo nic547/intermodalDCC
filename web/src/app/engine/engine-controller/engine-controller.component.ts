@@ -5,6 +5,7 @@ import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
 import { IconModule } from '../../ui/icon.module';
 import { type Engine, PersistentEngine as PersistentEngine, SimpleEngine } from '../types';
+import { SettingsService } from '../../services/settings-service/settings.service';
 
 @Component({
     selector: 'app-engine-controller',
@@ -18,6 +19,7 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     private data = inject(DataService);
     private static stateService: StateService | null = null;
     private stateService = inject(StateService);
+    protected settingService = inject(SettingsService)
 
     public engine = input.required<Engine>();
     public isSimpleEngine = computed(() => this.engine() instanceof SimpleEngine);

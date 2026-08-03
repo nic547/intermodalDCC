@@ -24,4 +24,6 @@ export class StateService {
     public deactivateEngine(engine: Engine): void {
         this.activeEnginesSignal.update((v) => v.filter((e) => e !== engine));
     }
+
+    public showSettings: WritableSignal<boolean> = signal(false);
 }

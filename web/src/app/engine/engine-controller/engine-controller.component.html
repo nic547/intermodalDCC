@@ -1,4 +1,4 @@
-<article id="loco-grid" class="border" (window:resize)="onResize()">
+<article id="loco-grid" class="border" (window:resize)="onResize()" [class.lh]="settingService.Settings.leftHandedThrottle()">
   <div id="address">
 
     @if (isSimpleEngine()) {
