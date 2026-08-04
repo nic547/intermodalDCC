@@ -8,19 +8,19 @@
     See <a class="link" href="https://caniuse.com/web-bluetooth">Can I Use</a> for a detailed overview of supported devices and browsers.
   </p>
 
-  <button (click)="connect()" [disabled]="bleService.isLoading() || !bleService.isAvailable()">Connect</button>
-  @if (bleService.isLoading()) {
+  <button (click)="connect()" [disabled]="connector.isLoading() || !connector.isAvailable()">Connect</button>
+  @if (connector.isLoading()) {
     <progress></progress>
   }
   <p>
-    @if (!bleService.IsFake) {
+    @if (!connector.IsFake) {
       <a href="/?fakeBle=true">Run without Bluetooth (for testing)</a>
     }
     @else {
     <a href="/?fakeBle=false">Switch back to Bluetooth</a>
   }
 </p>
-@if (bleService.errorMessage()) {
-  <article class="error">{{bleService.errorMessage()}}</article>
+@if (connector.errorMessage()) {
+  <article class="error">{{connector.errorMessage()}}</article>
 }
 </main>

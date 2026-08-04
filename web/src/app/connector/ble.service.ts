@@ -1,16 +1,16 @@
 /// <reference types="web-bluetooth" />
 
 import { Injectable, type Signal, type WritableSignal, signal } from '@angular/core';
-import { BleFakeService } from './ble-fake.service';
-import type { IBLEService } from './ble.interface';
-import { Session } from './ble.types';
+import { FakeConnectorService } from './fake-connector.service';
+import type { IConnector } from './connector.interface';
+import { Session } from './connector.types';
 
 const sessionStorageKey = 'ble-session';
 
 @Injectable({
     providedIn: 'root',
 })
-export class BLEService implements IBLEService {
+export class BleConnectorService implements IConnector {
     constructor() {
         if (!navigator.bluetooth) {
             this.isAvailable.set(false);
@@ -25,13 +25,13 @@ export class BLEService implements IBLEService {
         }
     }
 
-    static create(): IBLEService {
+    static create(): IConnector {
         const params = new URLSearchParams(document.location.search);
         const useFakeBle = params.get('fakeBle');
         if (useFakeBle === 'true') {
-            return new BleFakeService();
+            return new FakeConnectorService();
         }
-        return new BLEService();
+        return new BleConnectorService();
     }
 
     isLoading = signal(false);

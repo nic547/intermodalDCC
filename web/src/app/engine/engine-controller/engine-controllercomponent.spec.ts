@@ -1,7 +1,7 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
-import { BleFakeService } from '../../services/ble-service/ble-fake.service';
-import { BLEServiceToken } from '../../services/ble-service/ble.interface';
+import { FakeConnectorService } from '../../connector/fake-connector.service';
+import { ConnectorServiceToken } from '../../connector/connector.interface';
 import { SimpleEngine } from '../types';
 import { EngineControllerComponent } from './engine-controller.component';
 
@@ -20,7 +20,7 @@ describe('LocoControlComponent', () => {
 
         await TestBed.configureTestingModule({
             imports: [EngineControllerComponent],
-            providers: [{ provide: BLEServiceToken, useValue: new BleFakeService() }, provideZonelessChangeDetection()],
+            providers: [{ provide: ConnectorServiceToken, useValue: new FakeConnectorService() }, provideZonelessChangeDetection()],
         }).compileComponents();
 
         fixture = TestBed.createComponent(EngineControllerComponent);

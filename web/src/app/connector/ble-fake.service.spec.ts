@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
 import { provideZonelessChangeDetection } from '@angular/core';
-import { BleFakeService } from './ble-fake.service';
+import { FakeConnectorService } from './fake-connector.service';
 
 describe('BleFakeService', () => {
-    let service: BleFakeService;
+    let service: FakeConnectorService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [provideZonelessChangeDetection()],
         });
-        service = TestBed.inject(BleFakeService);
+        service = TestBed.inject(FakeConnectorService);
     });
 
     it('should be created', () => {

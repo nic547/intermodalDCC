@@ -1,15 +1,15 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { BLEService } from './ble.service';
+import { BleConnectorService } from './ble.service';
 
 describe('BLEService', () => {
-    let service: BLEService;
+    let service: BleConnectorService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [provideZonelessChangeDetection()],
         });
-        service = TestBed.inject(BLEService);
+        service = TestBed.inject(BleConnectorService);
     });
 
     it('should be created', () => {
