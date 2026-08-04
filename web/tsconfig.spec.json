@@ -8,7 +8,8 @@
       "web-bluetooth",
       "wicg-file-system-access",
       "vitest/globals"
-    ]
+    ],
+    "composite": true
   },
   "include": [
     "src/**/*.spec.ts",
