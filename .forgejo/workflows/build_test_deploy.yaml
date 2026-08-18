@@ -11,7 +11,7 @@ jobs:
       - name: Setup global tools from npm
         run: |
           npm install -g @angular/cli
-          npm install -g @azure/static-web-apps-cli
+          npm install -g wrangler
       - name: Build
         run: |
           cd web
@@ -35,11 +35,11 @@ jobs:
           cd web
           npm run patch-webmanifest "imDCC PRE" "intermodalDCC PREVIEW"
           ng build
-          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_PREVIEW_TOKEN }} --env production
+          npx wrangler pages deploy --project-name intermodaldcc --branch dev .\dist\web\browser\
       - name: Build and deploy to prod
         if: github.ref == 'refs/heads/main'
         run: |
           cd web
           npm run patch-webmanifest "intermodalDCC" "intermodalDCC"
           ng build
-          npx swa deploy ./dist/web/browser/ -d ${{ secrets.AZ_SWA_TOKEN }} --env production
+          npx wrangler pages deploy --project-name intermodaldcc --branch main .\dist\web\browser\
