@@ -11,6 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
+          restore-keys: npm-${{ runner.os }}-
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
+
       - name: Setup global tools from npm
         run: |
           npm install -g @angular/cli
@@ -18,7 +31,7 @@ jobs:
       - name: Build
         run: |
           cd web
-          npm install
+          npm ci
           ng build
       
       - name: Setup Test Environment
