@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: |
           cd web
-          npm install
+          npm ci
           ng build
       
       - name: Setup Test Environment
