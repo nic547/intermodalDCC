@@ -1,6 +1,6 @@
 import { type AfterContentInit, Component, type ElementRef, type OnInit, ViewChild, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BLEServiceToken } from '../../services/ble-service/ble.interface';
+import { ConnectorServiceToken } from '../../connector/connector.interface';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
 import { IconModule } from '../../ui/icon.module';
@@ -15,7 +15,7 @@ import { SettingsService } from '../../services/settings-service/settings.servic
 })
 export class EngineControllerComponent implements OnInit, AfterContentInit {
     @ViewChild('speedSlider') speedSlider: ElementRef<HTMLInputElement> | undefined;
-    private ble = inject(BLEServiceToken);
+    private connector = inject(ConnectorServiceToken);
     private data = inject(DataService);
     private static stateService: StateService | null = null;
     private stateService = inject(StateService);
@@ -43,7 +43,7 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     async toggleFunction(number: number) {
         this.engine().functions[number].isActive = !this.engine().functions[number].isActive;
         console.log('toggleFunction', number, this.engine().functions[number].isActive);
-        await this.ble.setFunction(this.engine().address, number, this.engine().functions[number].isActive);
+        await this.connector.setFunction(this.engine().address, number, this.engine().functions[number].isActive);
 
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
@@ -59,7 +59,7 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
         this.engine().isForwards = forward;
 
         console.log('setDirection', this.engine().speed, forward);
-        await this.ble.setSpeed128(this.engine().address, this.engine().speed, forward);
+        await this.connector.setSpeed128(this.engine().address, this.engine().speed, forward);
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
         }
@@ -67,7 +67,7 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
 
     async setSpeed() {
         console.log('setSpeed', this.engine().speed, this.engine().isForwards);
-        await this.ble.setSpeed128(this.engine().address, this.engine().speed, this.engine().isForwards);
+        await this.connector.setSpeed128(this.engine().address, this.engine().speed, this.engine().isForwards);
 
         this.updateSliderGradient();
         if (!this.isSimpleEngine()) {
@@ -102,7 +102,9 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
         }
 
         if (availableWidthPerElement < 400) {
-            availableWidthPerElement = 400;
+            // Don't force the controller wider than the viewport,
+            // so a single engine fits on small mobile screens
+            availableWidthPerElement = Math.min(400, clientWidth);
         }
 
         document.documentElement.style.setProperty('--engine-controller-width', `${availableWidthPerElement}px`);
@@ -111,10 +113,10 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     protected resetStateIfRequired() {
         const engine = this.engine();
 
-        if (engine instanceof PersistentEngine && ( this.ble.sessionUuid() !== engine.lastActiveSession || engine.lastActiveSession === null)) {
+        if (engine instanceof PersistentEngine && ( this.connector.sessionUuid() !== engine.lastActiveSession || engine.lastActiveSession === null)) {
             engine.speed = 0;
             engine.isForwards = true;
-            engine.lastActiveSession = this.ble.sessionUuid();
+            engine.lastActiveSession = this.connector.sessionUuid();
             for (const f of engine.functions) {
                 f.isActive = false;
             }

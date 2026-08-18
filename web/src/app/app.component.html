@@ -1,8 +1,8 @@
 <main class="main">
-  @if (!bleService.isReady()) {
-    <app-ble-setup></app-ble-setup>
+  @if (!connector.isReady()) {
+    <app-connector-setup></app-connector-setup>
   }
-  @if (bleService.isReady()) {
+  @if (connector.isReady()) {
     <app-stop-button></app-stop-button>
     <app-engine-root></app-engine-root>
   }

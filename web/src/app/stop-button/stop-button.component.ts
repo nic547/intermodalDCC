@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { BLEServiceToken } from '../services/ble-service/ble.interface';
+import { ConnectorServiceToken } from '../connector/connector.interface';
 
 @Component({
   selector: 'app-stop-button',
@@ -8,9 +8,9 @@ import { BLEServiceToken } from '../services/ble-service/ble.interface';
   styleUrl: './stop-button.component.css'
 })
 export class StopButtonComponent {
-  protected bleService = inject(BLEServiceToken);
+  protected connector = inject(ConnectorServiceToken);
 
   async toggleTrackPower() {
-    await this.bleService.setTrackPower(!this.bleService.isTrackPowerOn());
+    await this.connector.setTrackPower(!this.connector.isTrackPowerOn());
   }
 }

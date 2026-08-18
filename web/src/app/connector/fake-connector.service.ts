@@ -1,12 +1,12 @@
 /// <reference types="web-bluetooth" />
 
 import { Injectable, type Signal, type WritableSignal, signal } from '@angular/core';
-import type { IBLEService } from './ble.interface';
+import type { IConnector } from './connector.interface';
 
 @Injectable({
     providedIn: 'root',
 })
-export class BleFakeService implements IBLEService {
+export class FakeConnectorService implements IConnector {
     isTrackPowerOn: Signal<boolean> = signal(false);
     isLoading = signal(false);
     isReady = signal(false);

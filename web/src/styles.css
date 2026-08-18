@@ -19,7 +19,7 @@
     --padding: 0.75rem;
     --small-padding: 0.25rem;
 
-    --engine-controller-width: 400px;
+    --engine-controller-width: min(400px, 100dvw);
 }
 
 * {

@@ -1,7 +1,8 @@
 import { InjectionToken, type Signal } from '@angular/core';
 
-export interface IBLEService {
+export interface IConnector {
     setup(): Promise<void>;
+    
     setSpeed128(address: number, speed: number, forwards: boolean): Promise<void>;
     setFunction(address: number, number: number, state: boolean): Promise<void>;
     setTrackPower(enabled: boolean): Promise<void>;
@@ -17,5 +18,5 @@ export interface IBLEService {
     IsFake: boolean;
 }
 
-const BLEServiceToken = new InjectionToken<IBLEService>('IBLEService');
-export { BLEServiceToken };
+const ConnectorServiceToken = new InjectionToken<IConnector>('IConnector');
+export { ConnectorServiceToken };

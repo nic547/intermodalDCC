@@ -7,7 +7,8 @@
     "types": [
       "web-bluetooth",
       "wicg-file-system-access"
-    ]
+    ],
+    "composite": true
   },
   "files": [
     "src/main.ts"
