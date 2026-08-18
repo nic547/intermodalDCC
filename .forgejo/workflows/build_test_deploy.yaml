@@ -1,9 +1,12 @@
 on: [push]
 jobs:
-  print-content:
+  build-and-deploy:
     runs-on: docker
     container:
       image: node:24
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{secrets.CLOUDFLARE_ACCOUNT_ID}}
+      CLOUDFLARE_API_TOKEN: ${{secrets.CLOUDFLARE_API_TOKEN}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
