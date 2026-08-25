@@ -24,15 +24,11 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('web/package-lock.json') }}
 
-      - name: Setup global tools from npm
-        run: |
-          npm install -g @angular/cli
-          npm install -g wrangler
       - name: Build
         run: |
           cd web
           npm ci
-          ng build
+          npx ng build
       
       - name: Setup Test Environment
         run: |
@@ -42,20 +38,18 @@ jobs:
       - name: Test
         run: |
           cd web
-          ng test --no-watch --no-progress
+          npx ng test --no-watch --no-progress
       - name: Build and deploy to preview
         if: github.ref == 'refs/heads/dev'
-        # the preview static site is seperate from the "prod" one to be able to set a custom domain
-        # so we still deploy to the "prod env", but on a different service.
         run: |
           cd web
           npm run patch-webmanifest "imDCC PRE" "intermodalDCC PREVIEW"
-          ng build
+          npx ng build
           npx wrangler pages deploy --project-name intermodaldcc --branch dev ./dist/web/browser/
       - name: Build and deploy to prod
         if: github.ref == 'refs/heads/main'
         run: |
           cd web
           npm run patch-webmanifest "intermodalDCC" "intermodalDCC"
-          ng build
+          npx ng build
           npx wrangler pages deploy --project-name intermodaldcc --branch main ./dist/web/browser/
