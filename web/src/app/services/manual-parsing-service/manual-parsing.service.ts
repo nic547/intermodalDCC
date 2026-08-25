@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { LlmService } from '../llm-service/llm.service';
 import { DccFunction } from '../../engine/types';
-import { PDFParse } from 'pdf-parse';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +11,7 @@ export class ManualParsingService {
 
   async parseManual(file: File): Promise<DccFunction[] | Error> {
 
+    const { PDFParse } = await import('pdf-parse');
     PDFParse.setWorker('/assets/pdf.worker.mjs');
     let parser = await new PDFParse({ data: await file.arrayBuffer() });
     let pages = (await parser.getText()).pages.map(page => page.text);
