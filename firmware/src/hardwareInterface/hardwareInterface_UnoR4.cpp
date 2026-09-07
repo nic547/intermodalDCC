@@ -11,6 +11,7 @@ namespace hardwareInterface {
 FspTimer dcc_timer;
 
 constexpr float TIMER_RATE = 1'000'000.0f / 58.0f;
+constexpr uint8_t TIMER_IRQ_PRIORITY = 4; // otherwise something seems to interfere with timing
 
 void (*signal_callback)() = nullptr;
 
@@ -67,7 +68,7 @@ bool beginTimer(float rate, void (*timer_callback)(timer_callback_args_t *)) {
 
   Serial.println("Boop");
 
-  if (!dcc_timer.setup_overflow_irq()) {
+  if (!dcc_timer.setup_overflow_irq(TIMER_IRQ_PRIORITY)) {
     return false;
   }
 
