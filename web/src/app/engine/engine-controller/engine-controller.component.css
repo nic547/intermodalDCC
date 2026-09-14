@@ -50,43 +50,8 @@
 
 #speedSlider {
     grid-area: speed;
-    writing-mode: vertical-lr;
-    direction: rtl;
     vertical-align: middle;
     justify-self: center;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: var(--background-primary);
-    --value: 0%;
-
-    &:focus {
-        outline: none;
-    }
-
-    &::-webkit-slider-runnable-track {
-        width: 1em;
-        cursor: pointer;
-        background: linear-gradient(0deg, var(--color-primary) var(--value), var(--background-secondary) var(--value));
-        border-radius: 1em;
-    }
-
-    &::-webkit-slider-thumb {
-        height: 2em;
-        width: 2em;
-        border-radius: 50%;
-        background: var(--color-primary);
-        cursor: pointer;
-        -webkit-appearance: none;
-        transform: translateX(-25%);
-    }
-
-    &::-webkit-slider-thumb:hover {
-        filter: brightness(1.1);
-    }
-
-    &::-webkit-slider-thumb:active {
-        filter: brightness(0.75);
-    }
 }
 
 #speed-display {
