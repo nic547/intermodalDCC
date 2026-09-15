@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SpeedSliderComponent {
 
+  speedSteps = 126
   speedSlider = viewChild.required<ElementRef>('speedSlider')
 
   speed = model.required<number>()
@@ -22,6 +23,12 @@ export class SpeedSliderComponent {
   protected updateSliderGradient(speed: number) {
     const value = (speed / 126) * 100;
     this.speedSlider().nativeElement.style.setProperty('--value', `${value}%`);
+  }
+  
+  protected handleWheel(event: WheelEvent) {
+    var newSpeedRaw = this.speed() + Math.round(event.deltaY / 100 * - 1);
+    var newSpeed = Math.max(0, Math.min(this.speedSteps, newSpeedRaw));
+    this.speed.set(newSpeed);
   }
 
 

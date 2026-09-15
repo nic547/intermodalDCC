@@ -21,7 +21,7 @@
       </button>
     </div>
   </div>
-  <app-speed-slider id="speedSlider" [(speed)]="engine().speed"/>
+  <app-speed-slider id="speedSlider" [(speed)]="engine().speed" (speedChange)="setSpeed()"/>
   <span id="speed-display">{{engine().speed}}</span>
   <button appArrowBackIcon id="backwards" (click)="setDirection(false)" [class.secondary]="engine().isForwards"></button>
   <button appArrowForwardIcon id="forwards" (click)="setDirection(true)" [class.secondary]="!engine().isForwards"></button>
