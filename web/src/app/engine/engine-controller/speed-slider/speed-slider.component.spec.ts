@@ -13,6 +13,7 @@ describe('SpeedSliderComponent', () => {
     .compileComponents();
 
     fixture = TestBed.createComponent(SpeedSliderComponent);
+    fixture.componentRef.setInput("speed", 0)
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

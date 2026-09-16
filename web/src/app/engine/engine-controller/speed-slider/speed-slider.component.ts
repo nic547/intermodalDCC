@@ -26,6 +26,10 @@ export class SpeedSliderComponent {
   }
   
   protected handleWheel(event: WheelEvent) {
+    if (event.deltaMode != 0) 
+    {
+      console.warn('Unkown units for WheelEvent Delta')
+    }
     var newSpeedRaw = this.speed() + Math.round(event.deltaY / 100 * - 1);
     var newSpeed = Math.max(0, Math.min(this.speedSteps, newSpeedRaw));
     this.speed.set(newSpeed);
