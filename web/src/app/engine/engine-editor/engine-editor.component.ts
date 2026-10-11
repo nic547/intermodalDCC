@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 import { StateService } from '../../services/state-service/state.service';
 import { DccFunction, PersistentEngine } from '../types';
 import { DataService } from '../../services/data-service/data.service';
-import { IconModule } from '../../ui/icon.module';
+import { ICON_DIRECTIVES } from '../../ui/icons';
 import { ManualParsingService } from '../../services/manual-parsing-service/manual-parsing.service';
 import { SettingsService } from '../../services/settings-service/settings.service';
 
 @Component({
     selector: 'app-engine-editor',
-    imports: [FormsModule, IconModule],
+    imports: [FormsModule, ...ICON_DIRECTIVES],
     templateUrl: './engine-editor.component.html',
     styleUrl: './engine-editor.component.css',
 })

@@ -3,14 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { ConnectorServiceToken } from '../../connector/connector.interface';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
-import { IconModule } from '../../ui/icon.module';
+import { ICON_DIRECTIVES } from '../../ui/icons';
 import { type Engine, PersistentEngine as PersistentEngine, SimpleEngine } from '../types';
 import { SettingsService } from '../../services/settings-service/settings.service';
 import { SpeedSliderComponent } from './speed-slider/speed-slider.component';
 
 @Component({
     selector: 'app-engine-controller',
-    imports: [FormsModule, IconModule, SpeedSliderComponent],
+    imports: [FormsModule, ...ICON_DIRECTIVES, SpeedSliderComponent],
     templateUrl: './engine-controller.component.html',
     styleUrl: './engine-controller.component.css',
 })
