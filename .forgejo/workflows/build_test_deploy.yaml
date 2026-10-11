@@ -3,7 +3,7 @@ jobs:
   build-and-deploy:
     runs-on: docker
     container:
-      image: mcr.microsoft.com/playwright:v1.62.1-noble
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
       # should be node 24 implicitly
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{secrets.CLOUDFLARE_ACCOUNT_ID}}
