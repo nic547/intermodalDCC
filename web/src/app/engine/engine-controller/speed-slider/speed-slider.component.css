@@ -1,0 +1,44 @@
+:host {
+    display: block;
+    height: 100%;
+    min-height: 0; /* somehow the slider gets larger than the parent when not set? */
+}
+
+input {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--background-primary);
+    --value: 0%;
+    height: 100%;
+
+    &:focus {
+        outline: none;
+    }
+
+    &::-webkit-slider-runnable-track {
+        width: 1em;
+        cursor: pointer;
+        background: linear-gradient(0deg, var(--color-primary) var(--value), var(--background-secondary) var(--value));
+        border-radius: 1em;
+    }
+
+    &::-webkit-slider-thumb {
+        height: 2em;
+        width: 2em;
+        border-radius: 50%;
+        background: var(--color-primary);
+        cursor: pointer;
+        -webkit-appearance: none;
+        transform: translateX(-25%);
+    }
+
+    &::-webkit-slider-thumb:hover {
+        filter: brightness(1.1);
+    }
+
+    &::-webkit-slider-thumb:active {
+        filter: brightness(0.75);
+    }
+}

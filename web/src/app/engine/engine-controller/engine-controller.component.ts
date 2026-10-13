@@ -3,18 +3,18 @@ import { FormsModule } from '@angular/forms';
 import { ConnectorServiceToken } from '../../connector/connector.interface';
 import { DataService } from '../../services/data-service/data.service';
 import { StateService } from '../../services/state-service/state.service';
-import { IconModule } from '../../ui/icon.module';
+import { ICON_DIRECTIVES } from '../../ui/icons';
 import { type Engine, PersistentEngine as PersistentEngine, SimpleEngine } from '../types';
 import { SettingsService } from '../../services/settings-service/settings.service';
+import { SpeedSliderComponent } from './speed-slider/speed-slider.component';
 
 @Component({
     selector: 'app-engine-controller',
-    imports: [FormsModule, IconModule],
+    imports: [FormsModule, ...ICON_DIRECTIVES, SpeedSliderComponent],
     templateUrl: './engine-controller.component.html',
     styleUrl: './engine-controller.component.css',
 })
 export class EngineControllerComponent implements OnInit, AfterContentInit {
-    @ViewChild('speedSlider') speedSlider: ElementRef<HTMLInputElement> | undefined;
     private connector = inject(ConnectorServiceToken);
     private data = inject(DataService);
     private static stateService: StateService | null = null;
@@ -36,8 +36,6 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
 
     ngAfterContentInit(): void {
         this.resetStateIfRequired();
-        // relies on the slider existing to set the initial gradient
-        this.updateSliderGradient();
     }
 
     async toggleFunction(number: number) {
@@ -52,10 +50,6 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
 
     async setDirection(forward: boolean) {
         this.engine().speed = 0;
-        // Bit of a hack to get the slider to update
-        (document.getElementById('speedSlider') as HTMLInputElement).value = '0';
-        this.updateSliderGradient();
-
         this.engine().isForwards = forward;
 
         console.log('setDirection', this.engine().speed, forward);
@@ -69,7 +63,6 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
         console.log('setSpeed', this.engine().speed, this.engine().isForwards);
         await this.connector.setSpeed128(this.engine().address, this.engine().speed, this.engine().isForwards);
 
-        this.updateSliderGradient();
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
         }
@@ -82,11 +75,6 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     deactivateEngine() {
         this.stateService.deactivateEngine(this.engine());
         EngineControllerComponent.onResize();
-    }
-
-    protected updateSliderGradient() {
-        const value = (this.engine().speed / 126) * 100;
-        this.speedSlider?.nativeElement.style.setProperty('--value', `${value}%`);
     }
 
     protected static onResize() {

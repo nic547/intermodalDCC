@@ -18,10 +18,10 @@ int dataBytes = 2;
 // uint8_t data[6] = {0xD2, 0x2B, 0b10010000, 0x00, 0x00, 0x00};
 uint8_t data[6] = {0b0010'1110, 0b1001'0000, 0x00, 0x00, 0x00, 0x00};
 
-int nextDataLenght = 0;
-uint8_t nextData[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-bool nextDataIsReady = false;
-bool nextDataIsUsed = false;
+volatile int nextDataLenght = 0;
+volatile uint8_t nextData[6] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+volatile bool nextDataIsReady = false;
+volatile bool nextDataIsUsed = false;
 
 uint8_t checksum = data[0] ^ data[1];
 
@@ -93,11 +93,6 @@ void turn_on() {
   bitCount++;
   isFirstHalf = true;
   hardwareInterface::direction_b_on();
-
-  debugWrittenBit = currentBit + 1;
-  auto now = micros();
-  debugBitDuration = now - debugPreviousBitTimestamp;
-  debugPreviousBitTimestamp = now;
 }
 
 void turn_off() {
@@ -110,7 +105,9 @@ void getNextPacket() {
   noInterrupts();
   if (!nextDataIsUsed && nextDataIsReady) {
     nextDataIsUsed = true;
-    memcpy(data, nextData, 6);
+    for (int i = 0; i < nextDataLenght; i++) {
+      data[i] = nextData[i];
+    }
     dataBytes = nextDataLenght;
     checksum = data[0];
     for (int i = 1; i < dataBytes; i++) {

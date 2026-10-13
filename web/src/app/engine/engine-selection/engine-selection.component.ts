@@ -11,11 +11,11 @@ import { type Engine, PersistentEngine as PersistentEngine } from '../types';
 
 import { FormsModule } from '@angular/forms';
 import { TransferService } from '../../services/transfer-service/transfer.service';
-import { IconModule } from '../../ui/icon.module';
+import { ICON_DIRECTIVES } from '../../ui/icons';
 
 @Component({
     selector: 'app-engine-selection',
-    imports: [FormsModule, IconModule],
+    imports: [FormsModule, ...ICON_DIRECTIVES],
     templateUrl: './engine-selection.component.html',
     styleUrl: './engine-selection.component.css',
 })
