@@ -6,6 +6,10 @@
     grid-area: functions;
 }
 
+#functions button {
+    margin: var(--small-padding);
+}
+
 #functions.wide {
     grid-template-columns: 1fr 1fr;
 }
@@ -19,7 +23,7 @@
         "functions backwards forwards"
         "functions emergency emergency";
 
-    grid-template-columns: 1fr calc(2.625rem + 8px) calc(2.625rem + 8px);
+    grid-template-columns: 1fr 2.625rem 2.625rem;
     width: calc(var(--engine-controller-width) - 2 * var(--small-padding));
     grid-template-rows: auto 1fr auto auto auto;
     height: calc(100dvh - 2 * var(--small-padding) - 18px - 68px);
@@ -36,10 +40,10 @@
         "backwards forwards functions"
         "emergency emergency functions";
 
-    grid-template-columns: calc(2.625rem + 8px) calc(2.625rem + 8px) 1fr;
+    grid-template-columns: 2.625rem 2.625rem 1fr;
 }
 
-#address {
+#header {
     grid-area: name;
     margin-bottom: 16px;
     /* default is even larger - revist later*/
@@ -78,4 +82,8 @@
 
 #editclosediv>button {
     margin-right: 0px;
+}
+
+#address {
+    max-width: 150px;
 }

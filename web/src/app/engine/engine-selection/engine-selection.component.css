@@ -42,11 +42,24 @@ nav {
     width: 300px;
 }
 
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    column-gap: calc(var(--small-padding) * 2);
+}
+
 .toolbar {
     display: flex;
     align-items: center;
+    gap: calc(var(--small-padding) * 2);
 }
 
 .dialog-content {
     width: 90dvw;
+}
+
+#searchbar  {
+    max-width: 600px;
 }

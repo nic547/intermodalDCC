@@ -39,9 +39,15 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     }
 
     async toggleFunction(number: number) {
+        const address = this.engine().address
+
+        if (!address) {
+            return;
+        }
+
         this.engine().functions[number].isActive = !this.engine().functions[number].isActive;
         console.log('toggleFunction', number, this.engine().functions[number].isActive);
-        await this.connector.setFunction(this.engine().address, number, this.engine().functions[number].isActive);
+        await this.connector.setFunction(address, number, this.engine().functions[number].isActive);
 
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
@@ -49,11 +55,15 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
     }
 
     async setDirection(forward: boolean) {
-        this.engine().speed = 0;
-        this.engine().isForwards = forward;
-
         console.log('setDirection', this.engine().speed, forward);
-        await this.connector.setSpeed128(this.engine().address, this.engine().speed, forward);
+
+        const address = this.engine().address
+
+        if (!address) {
+            return;
+        }
+
+        await this.connector.setSpeed128(address, this.engine().speed, forward);
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
         }
@@ -61,7 +71,14 @@ export class EngineControllerComponent implements OnInit, AfterContentInit {
 
     async setSpeed() {
         console.log('setSpeed', this.engine().speed, this.engine().isForwards);
-        await this.connector.setSpeed128(this.engine().address, this.engine().speed, this.engine().isForwards);
+
+        const address = this.engine().address
+
+        if (!address) {
+            return;
+        }
+
+        await this.connector.setSpeed128(address, this.engine().speed, this.engine().isForwards);
 
         if (!this.isSimpleEngine()) {
             await this.data.addOrUpdateEngine(this.persistentEngine());
