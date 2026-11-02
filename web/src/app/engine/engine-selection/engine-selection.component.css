@@ -52,6 +52,7 @@ nav {
 
 .toolbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: calc(var(--small-padding) * 2);
 }
@@ -61,5 +62,6 @@ nav {
 }
 
 #searchbar  {
+    flex: 1 1 300px;
     max-width: 600px;
 }
