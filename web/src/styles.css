@@ -131,7 +131,6 @@ article {
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     padding: var(--small-padding);
-    margin: var(--small-padding);
 
     &.error {
         background-color: var(--color-error-background);

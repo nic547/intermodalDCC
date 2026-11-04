@@ -1,6 +1,9 @@
 .selectionGrid {
     display: grid;
     grid-template-columns: 1fr;
+    gap: calc(var(--small-padding) * 2);
+    margin-bottom: var(--small-padding);
+    margin-top: var(--small-padding)
 }
 
 @media (min-width: 600px) {

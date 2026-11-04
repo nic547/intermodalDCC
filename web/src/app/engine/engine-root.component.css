@@ -3,6 +3,7 @@
     align-items: center;
     max-width: 100dvw;
     overflow-x: auto;
+    gap: var(--small-padding);
 }
 
 #engine-container > :first-child {
