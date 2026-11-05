@@ -1,6 +1,6 @@
 <div class="dialog" #engineEditor (cancel)="cancel()" (close)="cancel()">
   <div class="dialog-content">
-  <h5>Edit Engine</h5>
+  <h3 class="small">Edit Engine</h3>
   <div>
     <div class="input">
       <label>Name</label>
@@ -35,7 +35,7 @@
     }
     <div class=function-number-container>
       <div class="input">
-        <label>Functions</label>
+        <label>Number of Functions</label>
         <input [(ngModel)]="numberOfFunctions" type="number" min="0" max="69" step="1"
           (change)="handleFunctionNumberChange()" />
         </div>

@@ -2,10 +2,7 @@
   <div class="dialog-content">
   <h2>Select Engine</h2>
   <div class="toolbar">
-    <div class="input">
-      <input type="search" [(ngModel)]="searchTerm" />
-      <label>Search</label>
-    </div>
+    <input id="searchbar" placeholder="Search ..." type="search" [(ngModel)]="searchTerm" />
     <select [(ngModel)]="sortKey">
       <option value="lastUsed">Last Used</option>
       <option value="name">Name</option>
@@ -20,7 +17,7 @@
     @for (engine of engines.value(); track engine.id) {
     <article>
       <h3 class="small border">{{engine.name}}</h3>
-      <p>
+      <p class="tags">
         @for(tag of engine.tags; track tag) {
         <button class="small secondary" (click)="setSearchTerm(tag)">{{tag}}</button>
         }

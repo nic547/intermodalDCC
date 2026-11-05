@@ -1,6 +1,9 @@
 .selectionGrid {
     display: grid;
     grid-template-columns: 1fr;
+    gap: calc(var(--small-padding) * 2);
+    margin-bottom: var(--small-padding);
+    margin-top: var(--small-padding)
 }
 
 @media (min-width: 600px) {
@@ -42,11 +45,26 @@ nav {
     width: 300px;
 }
 
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    column-gap: calc(var(--small-padding) * 2);
+}
+
 .toolbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    gap: calc(var(--small-padding) * 2);
 }
 
 .dialog-content {
     width: 90dvw;
+}
+
+#searchbar  {
+    flex: 1 1 300px;
+    max-width: 600px;
 }

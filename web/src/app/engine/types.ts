@@ -1,5 +1,5 @@
 export abstract class Engine {
-    address = 3;
+    address: number | null = null;
     functions: DccFunction[] = [];
     isForwards = true;
     speed = 0;
@@ -9,6 +9,7 @@ export class SimpleEngine extends Engine {}
 
 export class PersistentEngine extends Engine {
     id: string = crypto.randomUUID();
+    public override address: number = 3; 
     public name = '';
     public notes = '';
     public tags: string[] = [];

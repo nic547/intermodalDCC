@@ -1,11 +1,8 @@
 <article id="loco-grid" class="border" (window:resize)="onResize()" [class.lh]="settingService.Settings.leftHandedThrottle()">
-  <div id="address">
+  <div id="header">
 
     @if (isSimpleEngine()) {
-      <div class="input">
-        <label>DCC Address</label>
-        <input [(ngModel)]="engine().address" type="number" placeholder="" min="1" max="10239" />
-      </div>
+      <input [(ngModel)]="engine().address" id="address" type="number" placeholder="DCC Address" min="1" max="10239" />
     } @else {
       <div>
         <h3 class="small">{{persistentEngine().name}}</h3>
